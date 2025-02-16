@@ -1,5 +1,8 @@
 ![](https://custom-icon-badges.demolab.com/badge/STATUS-EM%20DESENVOLVIMENTO-8957E5.svg?logo=tools&logoColor=white)
 # WorkSync - Gestão de tarefas colaborativas
+> *Desenvolvido para a disciplina de **Engenharia de Software** - UFAPE 2024.1*\
+> **Docente**: *Dr. Rodrigo Andrade (**[@rcaa](https://github.com/rcaa)**)*
+> 
 
 ### 📑 Descrição 
 
@@ -16,6 +19,8 @@ em grupo. O foco é oferecer uma solução
 intuitiva e acessível, que possa ser utilizada
 por diferentes tipos de usuários, desde
 estudantes até profissionais.
+
+Com uma interface simples e intuitiva, o projeto visa otimizar a produtividade das equipes. O usuário pode visualizar o status de suas tarefas, com informações claras sobre prazos, progresso e pendências, facilitando o acompanhamento e a organização do trabalho em grupo.
 
 
 ### 📊 Tecnologias
