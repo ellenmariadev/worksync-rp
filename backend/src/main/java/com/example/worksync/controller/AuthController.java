@@ -5,6 +5,7 @@ import com.example.worksync.dto.LoginResponseDTO;
 import com.example.worksync.dto.UserDTO;
 import com.example.worksync.model.User;
 import com.example.worksync.service.AuthService;
+import com.example.worksync.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,18 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthDTO authDTO) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(
                 authDTO.getEmail(), authDTO.getPassword());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        String token = this.tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
