@@ -18,6 +18,9 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
+    @Value("${api.security.token.expiration}")
+    private Integer expirationTime;
+
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(this.secret);
@@ -46,6 +49,6 @@ public class TokenService {
     }
 
     private Instant getExpirationAt() {
-        return Instant.now().plusSeconds(7200);
+        return Instant.now().plusSeconds(expirationTime);
     }
 }
