@@ -1,8 +1,8 @@
 package com.example.worksync.controller;
 
-import com.example.worksync.dto.AuthDTO;
-import com.example.worksync.dto.LoginResponseDTO;
-import com.example.worksync.dto.UserDTO;
+import com.example.worksync.dto.requests.AuthDTO;
+import com.example.worksync.dto.responses.LoginResponseDTO;
+import com.example.worksync.dto.requests.UserDTO;
 import com.example.worksync.model.User;
 import com.example.worksync.service.AuthService;
 import com.example.worksync.service.TokenService;

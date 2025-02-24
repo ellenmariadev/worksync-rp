@@ -1,6 +1,6 @@
 package com.example.worksync.service;
 
-import com.example.worksync.dto.UserDTO;
+import com.example.worksync.dto.requests.UserDTO;
 import com.example.worksync.model.User;
 import com.example.worksync.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

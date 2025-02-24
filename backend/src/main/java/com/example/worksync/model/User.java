@@ -2,8 +2,10 @@ package com.example.worksync.model;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.worksync.model.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +15,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,14 +22,14 @@ import jakarta.persistence.Table;
 public class User implements UserDetails {
 
     @Id
-    @SequenceGenerator(name="user_id_seq", sequenceName="user_id_seq", allocationSize=1)
-    @GeneratedValue(generator="user_id_seq", strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.UUID)
     @Column(name="id", updatable=false)
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -48,7 +49,7 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -70,7 +71,7 @@ public class User implements UserDetails {
         return name;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

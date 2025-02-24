@@ -9,10 +9,10 @@
 		<relativePath/>
 	</parent>
 	<groupId>br.edu.ufape</groupId>
-	<artifactId>housing</artifactId>
+	<artifactId>worksync</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>housing</name>
-	<description>Housing project for Spring Boot</description>
+	<name>worksync</name>
+	<description>Worksync project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -34,7 +34,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
