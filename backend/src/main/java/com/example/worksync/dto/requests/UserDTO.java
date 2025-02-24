@@ -1,4 +1,4 @@
-package com.example.worksync.dto;
+package com.example.worksync.dto.requests;
 
 import com.example.worksync.model.enums.UserRole;
 
