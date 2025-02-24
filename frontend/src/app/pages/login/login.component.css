@@ -1,33 +1,13 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-}
-
-body {
-  background-color: white;
-  font-family: 'Inter', sans-serif;
-  overflow: hidden;
-  position: relative;
-  display: block;
-}
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  /* padding-top: 40px; */
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 1200px; /* Limitar a largura máxima do container */
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -49,12 +29,12 @@ body {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Mantém os elementos alinhados corretamente */
+  align-items: center;
   width: 100%;
-  max-width: 400px; /* Limita a largura do form */
+  max-width: 400px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  margin: 0 auto; /* Centraliza o conteúdo */
-  gap: 15px; 
+  margin: 0 auto;
+  gap: 15px;
 }
 
 h2 {
@@ -128,7 +108,7 @@ h2 {
   border: none;
   border-radius: 8px;
   color: white;
-  margin-top: 1rem; /* alteração aqui*/
+  margin-top: 1rem;
   width: 100%;
   font-size: 18px;
   font-family: 'Tilt Warp', cursive;
@@ -159,9 +139,9 @@ p a {
   left: 0;
   width: 100%;
   z-index: 1;
-  line-height: 0; /* Remove any potential line-height gap */
+  line-height: 0;
   overflow: hidden;
-  border: none; 
+  border: none;
   animation: wave-pulse 4s infinite ease-in-out;
 }
 
@@ -176,7 +156,7 @@ p a {
     transform: scaleX(1);
   }
   50% {
-    transform: scaleX(1.1); /* Aumenta o tamanho horizontalmente */
+    transform: scaleX(1.1);
   }
 }
 
@@ -186,8 +166,8 @@ p a {
 @media (max-width: 768px) {
   .main-box {
     padding: 20px;
-    width: 90%; /* O form vai ocupar 90% da largura da tela */
-    max-width: none;  /* Permite ocupar 90% da largura */
+    width: 90%;
+    max-width: none;
   }
 
   h2 {
@@ -208,7 +188,7 @@ p a {
 @media (max-width: 1024px) {
   .main-box {
     padding: 25px;
-    width: 80%; /* O form vai ocupar 80% da largura da tela */
+    width: 80%;
   }
 
   h2 {
@@ -226,7 +206,7 @@ p a {
   .main-box {
     padding: 30px;
     width: 100%;
-    max-width: 400px; /* Limita a largura do form */
+    max-width: 400px;
   }
 
   h2 {
@@ -242,10 +222,10 @@ p a {
 /* Para telas ultra-wide (1920px ou mais) */
 @media (min-width: 1920px) {
   .container {
-    max-width: 1400px; /* Limita o container para telas ultra-wide */
+    max-width: 1400px;
   }
 
   .main-box {
-    width: 400px; /* Garantir que o form não ocupe mais que 400px */
+    width: 400px;
   }
 }

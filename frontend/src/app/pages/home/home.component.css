@@ -1,0 +1,15 @@
+.logout {
+  color: #2b2b2b;
+  font-size: 1rem;
+}
+
+.title {
+  color: #8c2ff5;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header {
+  padding-inline: 10rem;
+  padding-block: 2rem;
+}

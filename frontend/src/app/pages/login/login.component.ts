@@ -27,21 +27,18 @@ export class LoginComponent {
   }
 
   async onSubmit() {
-  if (this.loginForm.valid) {
-    const { email, password } = this.loginForm.value;
-    console.log('Form values:', { email, password });  
-    try {
-      const success = await this.authService.login(email, password);
-      if (success) {
-        this.router.navigate(['/home']);
-      } else {
-        this.errorMessage = 'Falha no login. Por favor, tente novamente.';
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      try {
+        const success = await this.authService.login(email, password);
+        if (success) {
+        this.router.navigate(['']);
+        } else {
+          this.errorMessage = 'Falha no login. Por favor, tente novamente.';
+        }
+      } catch (error: any) {
+        this.errorMessage = 'Erro de login ' + error.message;
       }
-    } catch (error: any) {
-      this.errorMessage = 'Erro de login ' + error.message;
     }
-  } else {
-    console.log('Formulário inválido');
   }
-}
 }
