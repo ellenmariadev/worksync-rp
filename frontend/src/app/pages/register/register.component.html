@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WorkSync - Produtividade em harmonia</title>
+  <title>WorkSync - Cadastro de Usuário</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Tilt+Warp&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -13,28 +13,43 @@
     </div>
     <div class="main-box">
       <h2>Seja bem-vindo (a)!</h2>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <p>Crie sua conta para começar a usar o WorkSync.</p>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="input-group">
-          <input type="email" formControlName="email" placeholder="e-mail" />
+          <input type="text" formControlName="name" placeholder="Nome" />
+          <span class="material-icons">person</span>
+        </div>
+        <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="error">
+          O nome é obrigatório.
+        </div>
+
+        <div class="input-group">
+          <input type="email" formControlName="email" placeholder="E-mail" />
           <span class="material-icons">mail</span>
         </div>
-        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
-          Email inválido.
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+          E-mail inválido.
         </div>
 
         <div class="input-group">
-          <input type="password" formControlName="password" placeholder="senha" />
+          <input type="password" formControlName="password" placeholder="Senha" />
           <span class="material-icons">lock</span>
         </div>
-        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
-          A senha é obrigatória.
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+          A senha deve ter pelo menos 6 caracteres.
         </div>
 
-        <a href="#" class="forgot-password">Esqueceu a senha?</a>
-        <button type="submit" class="login-btn" [disabled]="loginForm.invalid">entrar</button>
+        <div class="input-group">
+          <input type="password" formControlName="confirmPassword" placeholder="Confirmar Senha" />
+          <span class="material-icons">lock</span>
+        </div>
+        <div *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched" class="error">
+          As senhas não coincidem.
+        </div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <button type="submit" class="register-btn" [disabled]="registerForm.invalid">Cadastrar</button>
       </form>
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <p>Não tem uma conta? <a href="/register">Cadastre-se!</a></p>
+      <p>Já tem uma conta? <a href="/login">Faça login</a></p>
     </div>
   </div>
   <div class="wave-container">
