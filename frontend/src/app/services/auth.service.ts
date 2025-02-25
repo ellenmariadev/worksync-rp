@@ -1,16 +1,33 @@
 import { Injectable } from '@angular/core';
 import { User } from './user';
 import { jwtDecode } from 'jwt-decode';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/auth/login';
+  private apiUrl = 'http://localhost:8080/auth';
+
+  constructor(private http: HttpClient) {}
+
+  register(name: string, email: string, password: string, role: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.apiUrl}/register`, { name, email, password, role }).subscribe(
+        response => {
+          resolve(true);
+        },
+        error => {
+          reject(false);
+        }
+      );
+    });
+  }
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      const response = await fetch(this.apiUrl, {
+      const response = await fetch(`${this.apiUrl}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
