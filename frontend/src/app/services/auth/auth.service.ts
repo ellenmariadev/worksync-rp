@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from './user';
+import { ErrorMessage, User } from '../types/user';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -17,42 +17,42 @@ export class AuthService {
     email: string,
     password: string,
     role: string
-  ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+  ): Promise<{ error: ErrorMessage } | Response> {
+    return new Promise((resolve, _) => {
       this.http
         .post(`${this.apiUrl}/register`, { name, email, password, role })
         .subscribe(
           (response) => {
-            resolve(true);
+            resolve(response as Response);
           },
           (error) => {
-            reject(false);
+            const errorMessage: ErrorMessage = error.error;
+            resolve({ error: errorMessage });
           }
         );
     });
   }
 
-  async login(email: string, password: string): Promise<boolean> {
-    try {
-      const response = await fetch(`${this.apiUrl}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+  async login(
+    email: string,
+    password: string
+  ): Promise<{ error: ErrorMessage } | Response> {
+    const response = await fetch(`${this.apiUrl}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
-      const decodedToken = jwtDecode(data.token);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(decodedToken));
-      return true;
-    } catch (error) {
-      console.error('Error during login:', error);
-      return false;
+    if (!response.ok) {
+      const errorMessage = await response.json();
+      return { error: errorMessage as ErrorMessage };
     }
+
+    const data = await response.json();
+    const decodedToken = jwtDecode(data.token);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(decodedToken));
+    return response;
   }
 
   logout() {

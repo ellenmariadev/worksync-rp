@@ -1,16 +1,15 @@
 package com.example.worksync.service;
 
 import com.example.worksync.dto.requests.UserDTO;
+import com.example.worksync.exceptions.ConflictException;
 import com.example.worksync.model.User;
 import com.example.worksync.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -27,7 +26,7 @@ public class AuthService implements UserDetailsService {
         UserDetails userDetails = this.userRepository.findByEmail(userDTO.getEmail());
 
         if (userDetails != null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Email already taken!");
+            throw new ConflictException("Email already taken");
         }
         String encriptedPassword = new BCryptPasswordEncoder().encode(userDTO.getPassword());
 
