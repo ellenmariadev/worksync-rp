@@ -5,23 +5,30 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8080/auth';
 
   constructor(private http: HttpClient) {}
 
-  register(name: string, email: string, password: string, role: string): Promise<boolean> {
+  register(
+    name: string,
+    email: string,
+    password: string,
+    role: string
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.apiUrl}/register`, { name, email, password, role }).subscribe(
-        response => {
-          resolve(true);
-        },
-        error => {
-          reject(false);
-        }
-      );
+      this.http
+        .post(`${this.apiUrl}/register`, { name, email, password, role })
+        .subscribe(
+          (response) => {
+            resolve(true);
+          },
+          (error) => {
+            reject(false);
+          }
+        );
     });
   }
 
@@ -54,12 +61,14 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    return !!token;
+    if (typeof localStorage === 'undefined') {
+      return false;
+    }
+    return !!localStorage.getItem('token');
   }
 
   getUser(): User | null {
     const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) as User : null;
+    return user ? (JSON.parse(user) as User) : null;
   }
 }
