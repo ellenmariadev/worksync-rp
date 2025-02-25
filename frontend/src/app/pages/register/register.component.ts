@@ -1,11 +1,20 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { translateError } from '../../utils/translateErrors';
 
-export function passwordMatcher(control: AbstractControl): ValidationErrors | null {
+export function passwordMatcher(
+  control: AbstractControl
+): ValidationErrors | null {
   const password = control.get('password');
   const confirmPassword = control.get('confirmPassword');
 
@@ -57,17 +66,18 @@ export class RegisterComponent {
 
     const { name, email, password, role } = this.registerForm.value;
 
-    try {
-      const success = await this.authService.register(name, email, password, role);
-      if (success) {
-        alert('Cadastro realizado com sucesso!');
-        this.router.navigate(['/login']);
-      } else {
-        this.errorMessage = 'Erro ao cadastrar, tente novamente!';
-      }
-    } catch (err) {
-      this.errorMessage = 'Esse e-mail já está cadastrado!';
-      console.error(err);
+    const response = await this.authService.register(
+      name,
+      email,
+      password,
+      role
+    );
+
+    this.errorMessage =
+      'error' in response ? translateError(response.error.message) : '';
+    if (!this.errorMessage) {
+      alert('Cadastro realizado com sucesso!');
+      this.router.navigate(['/login']);
     }
   }
 }
