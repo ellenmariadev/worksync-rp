@@ -21,7 +21,7 @@
         <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
           Email inválido.
         </div>
-        
+
         <div class="input-group">
           <input type="password" formControlName="password" placeholder="senha" />
           <span class="material-icons">lock</span>
@@ -29,12 +29,12 @@
         <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
           A senha é obrigatória.
         </div>
-        
+
         <a href="#" class="forgot-password">Esqueceu a senha?</a>
         <button type="submit" class="login-btn" [disabled]="loginForm.invalid">entrar</button>
       </form>
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <p>Não tem uma conta? <a [routerLink]="['/register']">Cadastre-se!</a></p>
+        <p>Não tem uma conta? <a href="/register">Cadastre-se!</a></p>
     </div>
   </div>
   <div class="wave-container">

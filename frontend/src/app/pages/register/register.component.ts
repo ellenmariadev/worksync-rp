@@ -37,7 +37,7 @@ export class RegisterComponent {
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
-        role: ['USER'], 
+        role: ['USER'],
       },
       {
         validators: passwordMatcher,
@@ -66,7 +66,7 @@ export class RegisterComponent {
         this.errorMessage = 'Erro ao cadastrar, tente novamente!';
       }
     } catch (err) {
-      this.errorMessage = 'Erro ao cadastrar, tente novamente!';
+      this.errorMessage = 'Esse e-mail já está cadastrado!';
       console.error(err);
     }
   }
