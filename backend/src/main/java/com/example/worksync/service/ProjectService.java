@@ -1,14 +1,15 @@
 package com.example.worksync.service;
 
-import com.example.worksync.dto.requests.ProjectDTO;
-import com.example.worksync.model.Project;
-import com.example.worksync.repository.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.worksync.dto.requests.ProjectDTO;
+import com.example.worksync.model.Project;
+import com.example.worksync.repository.ProjectRepository;
 
 @Service
 public class ProjectService {
@@ -41,6 +42,13 @@ public class ProjectService {
         project.setId(id);
         project = projectRepository.save(project);
         return convertToDTO(project);
+    }
+
+    public void deleteProject(Long id) {
+        if (!projectRepository.existsById(id)) {
+            throw new RuntimeException("Project not found!");
+        }
+        projectRepository.deleteById(id);
     }
 
     private ProjectDTO convertToDTO(Project project) {
