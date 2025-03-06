@@ -43,7 +43,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
-
+    
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 

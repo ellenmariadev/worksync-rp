@@ -27,7 +27,7 @@ public class TaskService {
 
     @Autowired
     private UserRepository userRepository;
-
+    
     public List<TaskDTO> listTasksByProject(Long projectId) {
         List<Task> tasks = taskRepository.findByProjectId(projectId);
         return tasks.stream()
