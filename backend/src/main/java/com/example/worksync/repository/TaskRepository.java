@@ -1,5 +1,6 @@
 package com.example.worksync.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +12,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByProjectId(Long projectId);
     Optional<Task> findById(Long id);
     boolean existsById(Long id);
+    List<Task> findByTitleContainingIgnoreCase(String title);
+    List<Task> findByStartDateBetween(LocalDate startDateMin, LocalDate startDateMax);
 }
