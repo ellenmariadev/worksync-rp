@@ -34,7 +34,7 @@ export class LoginComponent {
       this.errorMessage =
         'error' in response ? translateError(response.error.message) : '';
       if (!this.errorMessage) {
-        this.router.navigate(['']);
+        this.router.navigate(['/projects']);
       }
     }
   }
