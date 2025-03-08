@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.worksync.dto.requests.TaskDTO;
 import com.example.worksync.service.TaskService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tasks")
@@ -40,7 +44,10 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<?> createTask(@Valid @RequestBody TaskDTO taskDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
         TaskDTO newTask = taskService.createTask(taskDTO);
         return ResponseEntity.ok(newTask);
     }
@@ -53,18 +60,35 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<String> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Task has been successfully deleted.");
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<TaskDTO>> searchTasks(
-            @RequestParam(required = false) String titulo,
-            @RequestParam(required = false) LocalDate dataInicioMin,
-            @RequestParam(required = false) LocalDate dataInicioMax) {
+    public ResponseEntity<?> searchTasks(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) LocalDate startDateMin,
+            @RequestParam(required = false) LocalDate startDateMax) {
+        
+        try {
+            if (startDateMin != null && startDateMax != null && startDateMin.isAfter(startDateMax)) {
+                return ResponseEntity.badRequest().body("Start date cannot be later than end date.");
+            }
 
-        List<TaskDTO> tasks = taskService.searchTasks(titulo, dataInicioMin, dataInicioMax);
-        return ResponseEntity.ok(tasks);
+            String normalizedTitle = (title != null) ? title.trim().toLowerCase() : null;
+
+            List<TaskDTO> tasks = taskService.searchTasks(normalizedTitle, startDateMin, startDateMax);
+
+            if (tasks.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            return ResponseEntity.ok(tasks);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while fetching tasks: " + e.getMessage());
+        }
     }
 }
