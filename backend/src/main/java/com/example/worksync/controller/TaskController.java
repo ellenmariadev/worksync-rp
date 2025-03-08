@@ -70,25 +70,21 @@ public class TaskController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) LocalDate startDateMin,
             @RequestParam(required = false) LocalDate startDateMax) {
-        
+    
         try {
-            if (startDateMin != null && startDateMax != null && startDateMin.isAfter(startDateMax)) {
-                return ResponseEntity.badRequest().body("Start date cannot be later than end date.");
-            }
-
             String normalizedTitle = (title != null) ? title.trim().toLowerCase() : null;
-
+    
             List<TaskDTO> tasks = taskService.searchTasks(normalizedTitle, startDateMin, startDateMax);
-
+    
             if (tasks.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
-
+    
             return ResponseEntity.ok(tasks);
-
+    
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while fetching tasks: " + e.getMessage());
         }
-    }
+    } 
 }

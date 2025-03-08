@@ -1,11 +1,11 @@
 package com.example.worksync.dto.requests;
 
 import java.time.LocalDate;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Future;
 import com.example.worksync.model.enums.TaskStatus;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Future;
 
 public class TaskDTO {
 
