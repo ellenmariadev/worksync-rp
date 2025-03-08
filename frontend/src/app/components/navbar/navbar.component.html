@@ -1,0 +1,17 @@
+<header class="header">
+  <nav class="nav">
+    <img src="/assets/header-logo.svg" alt="WorkSync" class="logo" />
+    <ul class="nav__links">
+      <li><a routerLink="/projects" routerLinkActive="active">Projetos</a></li>
+      <li><a routerLink="/tasks" routerLinkActive="active">Tarefas</a></li>
+      <li><a routerLink="/create-task" routerLinkActive="active">+ Criar tarefa</a></li>
+    </ul>
+    <div class="user" (click)="toggleDropdown()" (keydown)="toggleDropdown()">
+      <span class="material-icons md-36">account_circle</span>
+      <p class="user__name">{{  username }}</p>
+      <div class="dropdown" *ngIf="dropdownOpen">
+        <a (click)="logout()">Sair</a>
+      </div>
+    </div>
+  </nav>
+</header>
