@@ -3,6 +3,7 @@ export type User = {
     email: string;
     password: string;
     role: string;
+    sub?: string;
 }
 
 export type ErrorMessage = {
