@@ -74,7 +74,7 @@ public class CommentService {
         Comment comment = commentOpt.get();
         
         
-        if (!comment.getUser().equals(user)) {
+        if (!comment.getUser().getId().equals(user.getId())) {
             throw new UnauthorizedAccessException("You are not authorized to delete this comment.");
         }
 
