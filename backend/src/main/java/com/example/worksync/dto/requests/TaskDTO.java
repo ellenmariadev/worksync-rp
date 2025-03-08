@@ -1,18 +1,41 @@
 package com.example.worksync.dto.requests;
 
 import java.time.LocalDate;
-
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Future;
 import com.example.worksync.model.enums.TaskStatus;
 
 public class TaskDTO {
+
     private Long id;
+
+    @NotNull(message = "Title is required")
+    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
     private String title;
+
+    @Size(max = 500, message = "Description must be less than 500 characters")
     private String description;
+
+    @NotNull(message = "Status is required")
     private TaskStatus status;
+
+    @NotNull(message = "Start date is required")
+    @PastOrPresent(message = "Start date must be in the past or present")
     private LocalDate startDate;
+
+    @Future(message = "Completion date must be in the future")
     private LocalDate completionDate;
+
+    @NotNull(message = "Deadline is required")
+    @Future(message = "Deadline must be in the future")
     private LocalDate deadline;
+
+    @NotNull(message = "Responsible ID is required")
     private Long responsibleId;
+
+    @NotNull(message = "Project ID is required")
     private Long projectId;
 
     public TaskDTO(Long id, String title, String description, TaskStatus status, LocalDate startDate, LocalDate completionDate, LocalDate deadline, Long responsibleId, Long projectId) {
@@ -53,5 +76,4 @@ public class TaskDTO {
 
     public Long getProjectId() { return projectId; }
     public void setProjectId(Long projectId) { this.projectId = projectId; }
-    
 }
