@@ -44,7 +44,7 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{projectId}/addParticipant/{userId}")
+    @PostMapping("/{projectId}/participants/{userId}")
      @PreAuthorize("hasRole('ADMIN')")
      public ResponseEntity<ProjectDTO> addParticipant(@PathVariable Long projectId, @PathVariable Long userId) {
          ProjectDTO updatedProject = projectService.addParticipantToProject(projectId, userId);
