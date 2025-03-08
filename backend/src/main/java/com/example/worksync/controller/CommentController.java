@@ -32,4 +32,12 @@ public class CommentController {
         CommentDTO newComment = commentService.addComment(commentDTO);
         return ResponseEntity.ok(newComment);
     }
+    
+    @DeleteMapping("/{commentId}")
+     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId, 
+                                               @AuthenticationPrincipal User user) {
+         commentService.deleteComment(commentId, user);
+         return ResponseEntity.noContent().build();
+     }
+
 }
