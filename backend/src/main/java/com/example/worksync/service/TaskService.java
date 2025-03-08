@@ -62,17 +62,17 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    public List<TaskDTO> searchTasks(String titulo, LocalDate dataInicioMin, LocalDate dataInicioMax) {
+    public List<TaskDTO> searchTasks(String title, LocalDate startDateMin, LocalDate startDateMax) {
         List<Task> tasks;
-
-        if (titulo != null) {
-            tasks = taskRepository.findByTitleContainingIgnoreCase(titulo);
-        } else if (dataInicioMin != null && dataInicioMax != null) {
-            tasks = taskRepository.findByStartDateBetween(dataInicioMin, dataInicioMax);
+    
+        if (title != null) {
+            tasks = taskRepository.findByTitleContainingIgnoreCase(title);
+        } else if (startDateMin != null && startDateMax != null) {
+            tasks = taskRepository.findByStartDateBetween(startDateMin, startDateMax);
         } else {
             throw new IllegalArgumentException("Provide either title or a valid date range.");
         }
-
+    
         return tasks.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 

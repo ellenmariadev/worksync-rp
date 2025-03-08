@@ -38,9 +38,16 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')") // Somente ADMIN pode deletar
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{projectId}/participants/{userId}")
+     @PreAuthorize("hasRole('ADMIN')")
+     public ResponseEntity<ProjectDTO> addParticipant(@PathVariable Long projectId, @PathVariable Long userId) {
+         ProjectDTO updatedProject = projectService.addParticipantToProject(projectId, userId);
+         return ResponseEntity.ok(updatedProject);
+     }
 }
