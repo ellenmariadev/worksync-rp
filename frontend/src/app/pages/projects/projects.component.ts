@@ -13,55 +13,51 @@ import { Router } from '@angular/router';
   styleUrls: ['./projects.component.css'],
 })
 export class ProjectsComponent implements OnInit {
-  projects: ProjectDTO[] = [];  // Lista de projetos
+  projects: ProjectDTO[] = [];
 
   constructor(
     private projectsService: ProjectsService,
-    private router: Router  // Injetar o serviço Router para navegação
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadProjects();  // Carregar projetos ao iniciar o componente
+    this.loadProjects();
   }
 
-  // Método para carregar projetos (opcionalmente com filtro por título)
   loadProjects(title: string = ''): void {
     this.projectsService.getAllProjects(title).subscribe(
       (data) => {
-        this.projects = data;  // Atualiza a lista de projetos com os dados retornados
+        this.projects = data;
       },
       (error) => {
-        console.error('Erro ao carregar projetos', error);  // Loga erro no console
+        console.error('Erro ao carregar projetos', error);
       }
     );
   }
 
-  // Método para editar o projeto
   editProject(id: number): void {
-    // Redireciona para uma página de edição de projeto
     this.router.navigate([`/projects/edit/${id}`]);
   }
 
-  // Método para excluir o projeto
   deleteProject(id: number): void {
     if (confirm('Tem certeza que deseja excluir este projeto?')) {
-      this.projectsService.deleteProject(id).subscribe(
-        () => {
-          // Remove o projeto excluído da lista localmente
+      this.projectsService.deleteProject(id).subscribe({
+        next: () => {
           this.projects = this.projects.filter(projeto => projeto.id !== id);
         },
-        (error) => {
+        error: (error) => {
           console.error('Erro ao excluir projeto', error);
         }
-      );
+      });
     }
   }
+
 
 
 
   // Método que vai ser chamado no evento input
   onSearchChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    this.loadProjects(inputElement.value);  // Chama o método de carregar projetos com o valor do input
+    this.loadProjects(inputElement.value);
   }
 }
