@@ -34,8 +34,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/projects").permitAll() // Permite o acesso sem autenticação à rota GET /projects
+                        .requestMatchers(HttpMethod.DELETE, "/projects/**").hasRole("ADMIN") // Permite DELETE apenas para ADMIN
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() // Requer autenticação para outras rotas
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

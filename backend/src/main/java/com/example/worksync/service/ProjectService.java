@@ -17,12 +17,18 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public List<ProjectDTO> listProjects() {
-        List<Project> projects = projectRepository.findAll();
+    public List<ProjectDTO> listProjects(String title) {
+        List<Project> projects;
+        if (title != null && !title.isEmpty()) {
+            projects = projectRepository.findByTitleContainingIgnoreCase(title);
+        } else {
+            projects = projectRepository.findAll();
+        }
         return projects.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    
 
     public Optional<ProjectDTO> findById(Long id) {
         return projectRepository.findById(id).map(this::convertToDTO);
