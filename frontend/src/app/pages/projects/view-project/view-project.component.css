@@ -1,0 +1,151 @@
+.goback {
+  padding: 2rem;
+  cursor: pointer;
+  font-size: 2rem;
+  color: #482b83;
+}
+
+.container {
+  max-width: 1500px;
+  padding-inline: 1rem;
+  margin: 0 auto;
+  color: #423F47;
+}
+
+.line {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.23);
+  margin-block: 2rem;
+}
+
+.info-list h2 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.material-icons.edit {
+  color: rgba(231, 160, 53, 0.8);
+}
+
+.material-icons.edit:hover {
+  cursor: pointer;
+  color: rgba(123, 88, 35, 0.8);
+}
+
+.flex {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: .875rem;
+  margin-bottom: 1rem;
+}
+
+.info-list li {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-participant {
+  background-color: #F5F5F5;
+  border: 1px solid #E0E0E0;
+  padding-inline: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tags {
+  padding-inline: 1rem;
+  background-color: #DAD4FF;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  place-content: center;
+  font-weight: 600;
+  color: #482b83;
+}
+
+.participants {
+  display: flex;
+  gap: 1rem;
+}
+
+.description-content {
+  width: 100%;
+}
+
+.description-content textarea {
+  border: 1px solid #9D9BA1;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  width: 98%;
+  height: 15rem;
+}
+
+.tasks .subtitle {
+  margin-bottom: 3rem;
+}
+
+.task-title {
+  padding-left: 5rem;
+
+}
+
+.task-title:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cols {
+  display: flex;
+  gap: 40rem;
+}
+
+.rows {
+  display: flex;
+  margin-top: 1rem;
+  gap: 34rem;
+  border-top: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  padding-block: .75rem;
+}
+
+.rows .status {
+  color: #7201E8;
+  background-color: #7101e833;
+  padding-inline: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-left: .5rem;
+  text-transform: uppercase;
+  font-size: 12px;
+  place-content: center;
+}
+
+
+.material-icons.delete {
+  color: rgba(231, 53, 53, 0.8);
+}
+
+.material-icons.delete:hover {
+  cursor: pointer;
+  color: rgba(130, 27, 27, 0.637);
+}
