@@ -1,0 +1,124 @@
+body {
+    font-family: 'Inter';
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+}
+
+.logo {
+    height: 32px;
+}
+
+.flex {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+main {
+    padding: 20px;
+}
+
+.container {
+    background: #F6F6F6;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #423F47;
+    font-size: 24px;
+    padding: 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #a994bd4f;
+    padding: 8px;
+    border-radius: 50px;
+    width: 100%;
+}
+
+.search-bar input {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 5px;
+}
+
+.material-icons.search{
+    color: #423F47;
+    font-size: 20px;
+}
+.btn-criar-projeto {
+    background-color: #6F27FE;
+    color: white;
+    border: none;
+    padding: 1px 10px;
+    width: 5rem;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-criar-projeto:hover {
+    background: #7201E8;
+    transform: scale(1.02);
+  }
+
+
+.projetos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.projeto {
+    background-color: white;
+    font-size: 12px;
+    font-weight: 500;
+    color: #423F47;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.projeto span {
+    padding-left: .75rem;
+}
+
+.projeto span:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+.acoes button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.material-icons.delete {
+    color: rgba(179, 72, 51, 0.419);
+    font-size: 18px;
+}
+
+.material-icons.delete:hover {
+    color: rgba(179, 72, 51, 0.719);
+}
+
+.material-icons.edit {
+    color: rgba(179, 151, 51, 0.419);
+    font-size: 18px;
+}
+
+.material-icons.edit:hover {
+    color: rgba(179, 151, 51, 0.719);
+}
+
+
