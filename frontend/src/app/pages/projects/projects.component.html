@@ -1,1 +1,32 @@
 <app-navbar></app-navbar>
+<router-outlet></router-outlet>
+
+<main>
+    <h1>Projetos</h1>
+    <div class="container">
+        <div class="flex">
+            <div class="search-bar">
+                <span class="material-icons search">search</span>
+                <input class="search" type="text" placeholder="Buscar projeto...">
+            </div>
+            <button class="btn-criar-projeto">+ Projeto</button>
+        </div>
+        <div class="projetos-container">
+            <!-- MAP DOS PROJETOS -->
+            <div class="projeto">
+                <span>Projeto Wave</span>
+                <div class="acoes">
+                    <button class="editar"><span class="material-icons edit">edit</span></button>
+                    <button class="excluir"><span class="material-icons delete">delete</span></button>
+                </div>
+            </div>
+            <div class="projeto">
+                <span>Projeto Obsidian</span>
+                <div class="acoes">
+                    <button class="editar"><span class="material-icons edit">edit</span></button>
+                    <button class="excluir"><span class="material-icons delete">delete</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
