@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { ViewProjectComponent } from './view-project/view-project.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-projects',
-  imports: [NavbarComponent],
+  standalone: true,
+  imports: [NavbarComponent, RouterModule],
   templateUrl: './projects.component.html',
-  styleUrl: './projects.component.css'
+  styleUrl: './projects.component.css',
 })
-export class ProjectsComponent { }
+export class ProjectsComponent {}
