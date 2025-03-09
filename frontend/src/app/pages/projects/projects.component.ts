@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ProjectsService } from '../../services/project.service';
 import { ProjectDTO } from '../../services/types/project';
-import { Router } from '@angular/router';  // Importar para navegação
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-projects',
