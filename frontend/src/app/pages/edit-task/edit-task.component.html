@@ -1,24 +1,20 @@
+<p>edit-task works!</p>
 <app-navbar></app-navbar>
 
-<!-- Botão de voltar separado do título -->
 <div class="header">
   <button class="back-button">←</button>
 </div>
 
-<!-- Título separado do botão -->
 <h1 class="page-title">Crie sua tarefa</h1>
 
-<!-- Container da área de criação de tarefas -->
 <div class="container">
   <div class="task-form">
     <div class="form-left">
-      <!-- Bloco para o título da tarefa -->
       <div class="title-task">
         <label for="title">Título da tarefa:</label>
         <input id="title" type="text" formControlName="title" class="input-field" />
       </div>
 
-      <!-- Bloco para a descrição da tarefa -->
       <div class="description-task">
         <label for="description">Descreva sua tarefa:</label>
         <textarea id="description" formControlName="description" class="textarea-field"></textarea>
@@ -69,5 +65,5 @@
     </div>
   </div>
 
-  <button class="create-button">Criar</button>
+  <button class="save-button">Salvar</button>
 </div>
