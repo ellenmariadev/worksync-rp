@@ -5,10 +5,3 @@ export type User = {
     role: string;
     sub?: string;
 }
-
-export type ErrorMessage = {
-  timestamp: string;
-  status: number;
-  error: string;
-  message: string;
-}
