@@ -15,8 +15,14 @@ public class TaskDTO {
     private LocalDate deadline;
     private Long responsibleId;
     private Long projectId;
+    private String projectName; 
 
-    public TaskDTO(Long id, String title, String description, TaskStatus status, LocalDate startDate, LocalDate completionDate, LocalDate deadline, Long responsibleId, Long projectId) {
+    public TaskDTO() {
+    }
+
+    public TaskDTO(Long id, String title, String description, TaskStatus status, 
+                   LocalDate startDate, LocalDate completionDate, LocalDate deadline, 
+                   Long responsibleId, Long projectId, String projectName) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -26,6 +32,13 @@ public class TaskDTO {
         this.deadline = deadline;
         this.responsibleId = responsibleId;
         this.projectId = projectId;
+        this.projectName = projectName; 
+    }
+
+    public TaskDTO(Long id, String title, String description, TaskStatus status, 
+                   LocalDate startDate, LocalDate completionDate, LocalDate deadline, 
+                   Long responsibleId, Long projectId) {
+        this(id, title, description, status, startDate, completionDate, deadline, responsibleId, projectId, null);
     }
 
     public Long getId() { return id; }
@@ -54,4 +67,7 @@ public class TaskDTO {
 
     public Long getProjectId() { return projectId; }
     public void setProjectId(Long projectId) { this.projectId = projectId; }
+
+    public String getProjectName() { return projectName; }
+    public void setProjectName(String projectName) { this.projectName = projectName; }
 }
