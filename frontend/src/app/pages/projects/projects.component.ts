@@ -3,21 +3,21 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ProjectsService } from '../../services/project.service';
 import { ProjectDTO } from '../../services/types/project';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';  // Importando Router
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent, RouterModule],  // Importando RouterModule aqui
   templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.css'],
+  styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
   projects: ProjectDTO[] = [];
 
   constructor(
     private projectsService: ProjectsService,
-    private router: Router
+    private router: Router  // Agora Router é reconhecido
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   editProject(id: number): void {
-    this.router.navigate([`/projects/edit/${id}`]);
+    this.router.navigate([`/projects/edit/${id}`]);  // Usando o Router para navegação
   }
 
   deleteProject(id: number): void {
@@ -51,9 +51,6 @@ export class ProjectsComponent implements OnInit {
       });
     }
   }
-
-
-
 
   // Método que vai ser chamado no evento input
   onSearchChange(event: Event): void {
