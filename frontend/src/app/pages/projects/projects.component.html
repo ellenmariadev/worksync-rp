@@ -10,7 +10,7 @@
                 <!-- Evento input chama a função onSearchChange -->
                 <input class="search" type="text" placeholder="Buscar projeto..." (input)="onSearchChange($event)">
             </div>
-            <button class="btn-criar-projeto">+ Projeto</button>
+            <button class="btn-criar-projeto" routerLink="/create-project" routerLinkActive="active">+ Projeto</button>
         </div>
         <div class="projetos-container">
             <!-- Usando o async pipe para automaticamente renderizar os dados do observable -->

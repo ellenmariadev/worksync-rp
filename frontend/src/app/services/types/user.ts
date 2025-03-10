@@ -6,7 +6,6 @@ export type User = {
     sub?: string;
 }
 
-
 export type Authority = {
   authority: string;
 }
