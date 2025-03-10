@@ -14,6 +14,7 @@ import { ProjectsService } from '../../services/project.service';
 import { ProjectDTO } from '../../services/types/project';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserDTO } from '../../services/types/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-create-task',
@@ -30,7 +31,7 @@ export class CreateTaskComponent {
 
   private tasksService = inject(TaskService);
   private projectsService = inject(ProjectsService);
-  private authService = inject(AuthService);
+  private usersService = inject(UserService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
 
@@ -61,7 +62,7 @@ export class CreateTaskComponent {
       }
     );
 
-    this.authService.getAllUsers().subscribe(
+    this.usersService.getAllUsers().subscribe(
       (data) => {
         this.users = data;
       },

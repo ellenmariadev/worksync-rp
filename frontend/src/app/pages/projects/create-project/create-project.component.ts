@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { ProjectsService } from '../../../services/project.service';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-create-project',
@@ -23,6 +24,7 @@ export class CreateProjectComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private projectService: ProjectsService,
+    private userService: UserService,
     private router: Router
   ) {
     this.projectForm = this.fb.group({
@@ -32,7 +34,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.projectService.getAllUsers().subscribe({
+    this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
         console.log('Usuários recebidos:', this.users);
@@ -68,7 +70,7 @@ export class CreateProjectComponent implements OnInit {
 
     // Verifica se o usuário já está na lista de participantes
     const alreadyAdded = this.participants.some(user => user.id === this.selectedUserId);
-    
+
     if (alreadyAdded) {
       alert('Erro: Este participante já foi adicionado!');
       return;

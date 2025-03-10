@@ -34,10 +34,6 @@ export class AuthService {
     });
   }
 
-    getAllUsers(): Observable<UserDTO[]> {
-      return this.http.get<UserDTO[]>(`${this.apiUrl}/users`);
-    }
-
   async login(
     email: string,
     password: string
