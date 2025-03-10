@@ -7,24 +7,24 @@
         <div class="flex">
             <div class="search-bar">
                 <span class="material-icons search">search</span>
-                <input class="search" type="text" placeholder="Buscar projeto...">
+                <!-- Evento input chama a função onSearchChange -->
+                <input class="search" type="text" placeholder="Buscar projeto..." (input)="onSearchChange($event)">
             </div>
             <button class="btn-criar-projeto">+ Projeto</button>
         </div>
         <div class="projetos-container">
-            <!-- MAP DOS PROJETOS -->
-            <div class="projeto">
-                <span>Projeto Wave</span>
+            <!-- Usando o async pipe para automaticamente renderizar os dados do observable -->
+            <div class="projeto" *ngFor="let projeto of projects">
+                <span>{{ projeto.title }}</span>
                 <div class="acoes">
-                    <button class="editar"><span class="material-icons edit">edit</span></button>
-                    <button class="excluir"><span class="material-icons delete">delete</span></button>
-                </div>
-            </div>
-            <div class="projeto">
-                <span>Projeto Obsidian</span>
-                <div class="acoes">
-                    <button class="editar"><span class="material-icons edit">edit</span></button>
-                    <button class="excluir"><span class="material-icons delete">delete</span></button>
+                    <!-- Botão de Editar -->
+                    <button class="editar" (click)="editProject(projeto.id)">
+                        <span class="material-icons edit">edit</span>
+                    </button>
+                    <!-- Botão de Excluir -->
+                    <button class="excluir" (click)="deleteProject(projeto.id)">
+                        <span class="material-icons delete">delete</span>
+                    </button>
                 </div>
             </div>
         </div>
