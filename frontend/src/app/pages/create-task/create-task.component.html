@@ -65,10 +65,7 @@
             <p class="info-name">Projeto</p>
           </div>
           <select formControlName="projectId" id="projectId">
-            <option value="1">Projeto 1</option>
-            <option value="2">Projeto 2</option>
-            <option value="3">Projeto 3</option>
-            <option value="4">Projeto 4</option>
+            <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
           </select>
         </div>
 
@@ -78,10 +75,7 @@
             <p class="info-name">Responsável</p>
           </div>
           <select formControlName="responsibleId" id="responsibleId">
-            <option value="1">Person 1</option>
-            <option value="2">Person 2</option>
-            <option value="3">Person 3</option>
-            <option value="4">Person 4</option>
+            <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
           </select>
         </div>
 
