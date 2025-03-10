@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
+
+<div class="create-project-container">
+  <h2>Crie o projeto</h2>
+
+  <form [formGroup]="projectForm" (ngSubmit)="createProject()">
+    <label for="title">Título do projeto:</label>
+    <input type="text" id="title" formControlName="title" required>
+
+    <label for="description">Descreva o projeto:</label>
+    <textarea id="description" formControlName="description" required></textarea>
+
+    <button type="submit" [disabled]="projectForm.invalid">Criar</button>
+  </form>
+
+  <!-- Campo para adicionar participantes (somente após a criação do projeto) -->
+  <div *ngIf="projectId">
+    <h3>Adicionar Participantes</h3>
+
+    <label for="userSelect">Selecione um usuário:</label>
+    <select id="userSelect" [(ngModel)]="selectedUserId">
+        <option value="" disabled>Selecione um usuário</option>
+        <option *ngFor="let user of users" [value]="user.id.toString()">{{ user.name }}</option>
+    </select>
+    <button (click)="addParticipant()">Adicionar</button>
+
+    <h4>Participantes adicionados:</h4>
+    <ul>
+        <li *ngFor="let participant of participants">{{ participant.name }}</li>
+    </ul>
+  </div>
+
+  <button *ngIf="projectId" (click)="finalizeProject()">Finalizar</button>
+
+
+</div>
