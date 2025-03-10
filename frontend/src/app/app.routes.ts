@@ -21,24 +21,27 @@ export const routes: Routes = [
     component: ProjectsComponent,
     canActivate: [AuthGuard],
     title: 'Projetos - Worksync',
-    children: [
-      {
-        path: ':projectId',
-        component: ViewProjectComponent,
-      },
-    ],
   },
-  { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard], title: 'Tarefas - Worksync',
-    children: [
-      {
-        path: ':taskId',
-        component: ViewTaskComponent,
-      },
-    ],
-   },
+  {
+    path: 'projects/:projectId',
+    component: ViewProjectComponent,
+    canActivate: [AuthGuard],
+    title: 'Projeto - Worksync',
+  },
+  {
+    path: 'tasks',
+    component: TasksComponent,
+    canActivate: [AuthGuard],
+    title: 'Tarefas - Worksync',
+  },
+  {
+    path: 'tasks/:taskId',
+    component: ViewTaskComponent,
+    canActivate: [AuthGuard],
+    title: 'Tarefa - Worksync',
+  },
   { path: 'create-task', component: CreateTaskComponent, canActivate: [AuthGuard], title: 'Criar Tarefa - Worksync' },
   { path: 'register', component: RegisterComponent, title: 'Cadastrar - Worksync' },
-  // { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-  {path: 'create-project', component: CreateProjectComponent, canActivate: [AuthGuard], title: 'Criar projeto - Worksync' },
+  { path: 'create-project', component: CreateProjectComponent, canActivate: [AuthGuard], title: 'Criar projeto - Worksync' },
   { path: '**', redirectTo: '/login' },
 ];

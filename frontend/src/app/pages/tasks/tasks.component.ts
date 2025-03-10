@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { RouterModule } from '@angular/router';
-
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tasks',
@@ -9,4 +8,11 @@ import { RouterModule } from '@angular/router';
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })
-export class TasksComponent {}
+export class TasksComponent {
+  private router = inject(Router);
+
+  goToCreateTask(): void {
+    this.router.navigate(['/create-task']);
+  }
+
+}

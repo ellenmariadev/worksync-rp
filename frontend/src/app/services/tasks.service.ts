@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ErrorMessage } from '../../types/error';
+import { ErrorMessage } from './types/error';
 import { start } from 'repl';
 
 @Injectable({
@@ -48,6 +48,7 @@ export class TaskService {
           },
           (error) => {
             const errorMessage: ErrorMessage = error.error;
+            console.log(errorMessage);
             resolve({ error: errorMessage });
           }
         );

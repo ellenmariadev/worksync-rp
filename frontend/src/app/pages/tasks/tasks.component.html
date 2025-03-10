@@ -1,4 +1,5 @@
 <app-navbar></app-navbar>
+<router-outlet></router-outlet>
 
 <main>
     <h1>Tarefas</h1>
@@ -9,7 +10,7 @@
                 <input class="search" type="text" placeholder="Buscar tarefa...">
             </div>
             <button class="btn-menu">&#9776;</button>
-            <button class="btn-criar-tarefa">+ Tarefa</button>
+            <button (click)="goToCreateTask()" class="btn-criar-tarefa">+ Tarefa</button>
         </div>
 
         <div class="tabela-tarefas">
