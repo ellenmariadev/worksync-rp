@@ -67,7 +67,7 @@ public class User implements UserDetails {
         return role;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
