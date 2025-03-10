@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.worksync.dto.requests.TaskDTO;
+import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.service.TaskService;
 
 import jakarta.validation.Valid;
@@ -65,9 +65,17 @@ public class TaskController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
-        return ResponseEntity.ok("Task has been successfully deleted.");
+        try {
+            taskService.deleteTask(id);
+            return ResponseEntity.ok("Task has been successfully deleted.");
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while deleting the task: " + e.getMessage());
+        }
     }
+    
 
     @GetMapping("/search")
     public ResponseEntity<?> searchTasks(

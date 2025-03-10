@@ -27,16 +27,19 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard], title: 'Tarefas - Worksync',
+  {
+    path: 'tasks',
+    component: TasksComponent,
+    canActivate: [AuthGuard],
+    title: 'Tarefas - Worksync',
     children: [
       {
         path: ':taskId',
         component: ViewTaskComponent,
       },
     ],
-   },
+  },
   { path: 'create-task', component: CreateTaskComponent, canActivate: [AuthGuard], title: 'Criar Tarefa - Worksync' },
   { path: 'register', component: RegisterComponent, title: 'Cadastrar - Worksync' },
-  // { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/login' },
 ];

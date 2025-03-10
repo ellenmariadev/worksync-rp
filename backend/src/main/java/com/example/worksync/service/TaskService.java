@@ -97,6 +97,7 @@ public class TaskService {
         }
         taskRepository.deleteById(id);
     }
+    
 
     public List<TaskDTO> searchTasks(String title, LocalDate startDateMin, LocalDate startDateMax) {
         List<Task> tasks;
