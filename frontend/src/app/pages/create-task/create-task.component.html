@@ -1,73 +1,100 @@
 <app-navbar></app-navbar>
 
-<!-- Botão de voltar separado do título -->
-<div class="header">
-  <button class="back-button">←</button>
-</div>
-
-<!-- Título separado do botão -->
+<a href="/tasks">
+  <span class="material-icons goback"> arrow_back </span>
+</a>
 <h1 class="page-title">Crie sua tarefa</h1>
 
-<!-- Container da área de criação de tarefas -->
-<div class="container">
-  <div class="task-form">
-    <div class="form-left">
-      <!-- Bloco para o título da tarefa -->
-      <div class="title-task">
-        <label for="title">Título da tarefa:</label>
-        <input id="title" type="text" formControlName="title" class="input-field" />
+<main class="main">
+  <div class="container">
+    <form class="task-form" [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+      <div class="form-left">
+        <div class="title-task">
+          <label for="title">Título da tarefa:</label>
+          <input
+            id="title"
+            type="text"
+            formControlName="title"
+            class="input-field"
+          />
+        </div>
+
+        <div class="description-task">
+          <label for="description">Descreva sua tarefa:</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            class="textarea-field"
+          ></textarea>
+        </div>
       </div>
 
-      <!-- Bloco para a descrição da tarefa -->
-      <div class="description-task">
-        <label for="description">Descreva sua tarefa:</label>
-        <textarea id="description" formControlName="description" class="textarea-field"></textarea>
-      </div>
-    </div>
+      <div class="form-right">
+        <h3>Defina as datas:</h3>
+        <div class="date-field">
+          <div style="display: flex">
+            <span class="material-icons"> start </span>
+            <p class="date-name">Início</p>
+          </div>
+          <input formControlName="startDate" type="date" id="fromDate" />
+        </div>
 
-    <div class="form-right">
-      <h3>Defina as datas:</h3>
-      <div class="date-field">
-        <span class="date-icon">⏳</span>
-        <span class="date-name">Início</span>
-        <span class="date-value">May, 15 2022</span>
-      </div>
-      
-      <div class="date-field">
-        <span class="date-icon">➡️</span>
-        <span class="date-name">Fim</span>
-        <span class="date-value">May, 15 2022</span>
-      </div>
-      
-      <div class="date-field">
-        <span class="date-icon">📅</span>
-        <span class="date-name">Prazo</span>
-        <span class="date-value">May, 15 2022</span>
-      </div>
+        <div class="date-field">
+          <div style="display: flex">
+            <span class="material-icons"> last_page </span>
+            <p class="date-name">Fim</p>
+          </div>
+          <input formControlName="endDate" type="date" id="endDate" />
+        </div>
 
-      <hr class="hr-separator">
+        <div class="date-field">
+          <div style="display: flex">
+            <span class="material-icons"> insert_invitation </span>
+            <p class="date-name">Prazo</p>
+          </div>
+          <input formControlName="deadline" type="date" id="deadline" />
+        </div>
 
-      <h3>Defina o projeto e o responsável</h3>
+        <hr class="hr-separator" />
 
-      <div class="info-field">
-        <span class="info-icon">📂</span>
-        <span class="info-name">Projeto</span>
-        <span class="info-value">Team projects</span>
+        <h3>Defina o projeto e o responsável</h3>
+
+        <div class="info-field">
+          <div style="display: flex">
+            <span class="material-icons"> edit_note </span>
+            <p class="info-name">Projeto</p>
+          </div>
+          <select formControlName="projectId" id="projectId">
+            <option value="1">Projeto 1</option>
+            <option value="2">Projeto 2</option>
+            <option value="3">Projeto 3</option>
+            <option value="4">Projeto 4</option>
+          </select>
+        </div>
+
+        <div class="info-field">
+          <div style="display: flex">
+            <span class="material-icons user"> person_outline </span>
+            <p class="info-name">Responsável</p>
+          </div>
+          <select formControlName="responsibleId" id="responsibleId">
+            <option value="1">Person 1</option>
+            <option value="2">Person 2</option>
+            <option value="3">Person 3</option>
+            <option value="4">Person 4</option>
+          </select>
+        </div>
+
+        <div class="info-field">
+          <span class="material-icons"> check_circle_outline </span>
+          <p class="info-name">Status</p>
+          <span class="info-status">Não iniciada</span>
+        </div>
       </div>
-
-      <div class="info-field">
-        <span class="info-icon">👤</span>
-        <span class="info-name">Responsável</span>
-        <span class="info-value">User 2</span>
+      <div>
+        <button type="submit" class="create-button">Criar</button>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
       </div>
-
-      <div class="info-field">
-        <span class="info-icon">✔️</span>
-        <span class="info-name">Status</span>
-        <span class="info-status">Em andamento</span>
-      </div>
-    </div>
+    </form>
   </div>
-
-  <button class="create-button">Criar</button>
-</div>
+</main>

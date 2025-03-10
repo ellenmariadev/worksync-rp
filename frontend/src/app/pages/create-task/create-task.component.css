@@ -5,7 +5,20 @@ body {
   background-color: #f8f8f8;
 }
 
-/* Botão de voltar separado do título */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  place-content: center;
+}
+
+.goback {
+  padding: 2rem;
+  cursor: pointer;
+  font-size: 2rem;
+  color: #482b83;
+}
+
 .header {
   display: flex;
   justify-content: flex-start;
@@ -22,139 +35,126 @@ body {
   border: none;
 }
 
-/* Título "Crie sua tarefa" agora está abaixo do botão */
 .page-title {
   font-size: 2rem;
   color: #333;
-  margin-left: 300px;
+  margin-left: 5rem;
   margin-bottom: 30px;
 }
 
-/* Container principal */
 .container {
+  display: flex;
   background: #F6F6F6;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 70%;
-  margin: 0 auto 40px auto;
+  width: 90%;
   padding: 30px;
   border-radius: 12px;
+  flex-direction: column;
 }
 
-/* Layout do formulário */
 .task-form {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
-/* Criar uma linha fina central para separar os lados esquerdo e direito do formulário */
-.task-form::before {
-  content: "";
-  position: absolute;
-  top: 5%;
-  bottom: 5%; /* Mantém a linha dentro das margens */
-  left: 50%;
-  width: 1px;
-  background-color: #bbb; /* Linha escurecida */
-  transform: translateX(-50%);
+.form-left {
+  border-right: 1px solid #bbb;
+  padding-right: 3rem;
 }
 
-.form-left, .form-right {
-  width: 48%;
-}
-
-/* Bloco de título "Título da tarefa" */
-.title-task {
-  margin-bottom: 35px; /* Maior espaçamento entre título e área de texto */
-  margin-top: 60px;
-}
-
-/* Bloco de título "Descreva sua tarefa" */
 .description-task {
-  margin-bottom: 35px; /* Maior espaçamento entre título e área de texto */
+  margin-bottom: 35px;
 }
 
-/* Títulos "Título da tarefa", "Descreva sua tarefa", "Defina as datas" e "Defina o projeto e o responsável" mais finos e com cor mais clara */
 .form-left label, h3 {
-  color: #A0A0A0; /* Cinza mais claro */
-  font-weight: normal; /* Remove o negrito */
-  margin-bottom: 12px; /* Aumenta o espaço entre o título e a área de texto */
+  color: #A0A0A0;
+  font-weight: normal;
+  margin-bottom: 12px;
   display: block;
 }
 
-/* Aumentar o espaço entre as áreas de texto */
 .input-field {
-  margin-bottom: 40px; /* Aumenta o espaço entre as áreas de texto */
-  width: 550px;
+  margin-bottom: 40px;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
 }
 
 .textarea-field {
-  margin-bottom: 30px; /* Aumenta o espaço entre as áreas de texto */
-  width: 550px;
+  margin-bottom: 30px;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
 }
 
-/* Ajustar área de texto */
 .textarea-field {
-  height: 100px;
+  height: 300px;
   resize: none;
 }
 
 .date-field, .info-field {
   display: flex;
-  align-items: center; /* Alinha os itens verticalmente no centro */
-  justify-content: space-between; /* Espaça os itens ao longo do eixo horizontal */
+  align-items: center;
+  justify-content: space-between;
   background: #F6F6F6;
   padding: 8px;
   border-radius: 6px;
   margin-bottom: 10px;
 }
 
-/* Ícones separados */
 .date-icon, .info-icon {
   font-size: 18px;
-  margin-right: 10px;  /* Espaço entre o ícone e o texto */
+  margin-right: 10px;
 }
 
-/* Nomes dos valores (data, projeto, responsável, etc.) */
 .date-name, .info-name {
-  color: #888;         /* Cor cinza mais clara */
-  font-weight: normal; /* Remove o negrito */
-  margin-right: 10px;  /* Espaço entre o nome e o ícone */
-  text-align: left;    /* Alinha os nomes à esquerda */
-  flex-shrink: 0;      /* Impede que o nome encolha */
+  color: #888;
+  font-weight: normal;
+  margin-right: 10px;
+  text-align: left;
+  flex-shrink: 0;
+
 }
 
-/* Informações (datas, projeto, responsável) alinhadas à direita */
 .date-value, .info-value, .info-status {
-  font-weight: normal;    /* Remove o negrito */
-  color: #A0A0A0;         /* Cor cinza mais clara */
-  text-align: right;      /* Alinha as informações à direita */
-  flex-grow: 1;           /* Faz com que as informações ocupem o espaço restante */
+  font-weight: normal;
+  color: #A0A0A0;
+  text-align: right;
+  flex-grow: 1;
 }
 
-/* Linha horizontal separadora entre os blocos "Defina as datas" e "Defina o projeto e o responsável" */
 .hr-separator {
   border: none;
-  border-top: 1px solid #bbb; /* Linha horizontal */
+  border-top: 1px solid #bbb;
   margin: 30px 0;
 }
 
-/* Botão Criar alinhado à direita */
 .create-button {
   display: block;
   width: 100px;
-  margin: 20px 0 20px auto; /* Alinha o botão à direita */
   background: #6F27FE;
   color: white;
   border: none;
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+  place-self: start;
+  margin-bottom: 1rem;
+}
+
+
+.form-right p {
+  padding-left: 1rem;
+}
+
+.error-message {
+  color: rgb(255, 146, 146);
+  font-size: small;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  text-align: start;
 }
