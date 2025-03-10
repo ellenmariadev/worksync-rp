@@ -5,3 +5,7 @@ export type User = {
     role: string;
     sub?: string;
 }
+
+export type ErrorMessage = {
+  message: string;
+};
