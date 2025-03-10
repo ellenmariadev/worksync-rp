@@ -1,5 +1,6 @@
 package com.example.worksync.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,12 +19,18 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public List<ProjectDTO> listProjects() {
-        List<Project> projects = projectRepository.findAll();
+    public List<ProjectDTO> listProjects(String title) {
+        List<Project> projects;
+        if (title != null && !title.isEmpty()) {
+            projects = projectRepository.findByTitleContainingIgnoreCase(title);
+        } else {
+            projects = projectRepository.findAll();
+        }
         return projects.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    
 
     public Optional<ProjectDTO> findById(Long id) {
         return projectRepository.findById(id).map(this::convertToDTO);
@@ -87,12 +94,25 @@ public class ProjectService {
         );
     }
 
-    private Project convertToEntity(ProjectDTO dto) {
-        Project project = new Project();
-        project.setTitle(dto.getTitle());
-        project.setDescription(dto.getDescription());
+private Project convertToEntity(ProjectDTO dto) {
+    Project project = new Project();
+    project.setId(dto.getId());
+    project.setTitle(dto.getTitle());
+    project.setDescription(dto.getDescription());
+
+    if (dto.getParticipantIds() != null) {
         project.setParticipantIds(dto.getParticipantIds());
-        project.setTaskIds(dto.getTaskIds());
-        return project;
+    } else {
+        project.setParticipantIds(new ArrayList<>()); 
     }
+
+    if (dto.getTaskIds() != null) {
+        project.setTaskIds(dto.getTaskIds());
+    } else {
+        project.setTaskIds(new ArrayList<>());
+    }
+
+    return project;
+}
+
 }
