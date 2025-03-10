@@ -35,7 +35,7 @@ export class TasksComponent implements OnInit {
       this.taskService.deleteTask(id).subscribe({
         next: () => {
           this.tasks = this.tasks.filter((task) => task.id !== id);
-          this.cdr.detectChanges(); // Força a atualização do Angular
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Erro ao excluir tarefa', err);
