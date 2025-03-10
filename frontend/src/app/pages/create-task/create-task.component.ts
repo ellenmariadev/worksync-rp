@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { TaskService } from '../../services/tasks/tasks.service';
+import { TaskService } from '../../services/auth/tasks/tasks.service';
 import { Router } from '@angular/router';
 import { translateError } from '../../utils/translateErrors';
 
