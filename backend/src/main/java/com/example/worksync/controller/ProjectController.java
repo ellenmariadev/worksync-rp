@@ -2,6 +2,7 @@ package com.example.worksync.controller;
 
 import java.util.List;
 
+import com.example.worksync.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,14 @@ public class ProjectController {
     public ResponseEntity<List<ProjectDTO>> listProjects(@RequestParam(required = false) String title) {
         List<ProjectDTO> projects = projectService.listProjects(title);
         return new ResponseEntity<>(projects, HttpStatus.OK);
-    }    
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
+        return projectService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new NotFoundException("Project not found!"));
+    }
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

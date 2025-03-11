@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { ProjectsService } from '../../../services/project.service';
+import { UserService } from '../../../services/user.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -23,6 +24,7 @@ export class CreateProjectComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private projectService: ProjectsService,
+    private userService: UserService,
     private router: Router
   ) {
     this.projectForm = this.fb.group({
@@ -32,7 +34,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.projectService.getAllUsers().subscribe({
+    this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
         console.log('Usuários recebidos:', this.users);

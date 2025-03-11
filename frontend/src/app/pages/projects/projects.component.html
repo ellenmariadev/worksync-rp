@@ -15,7 +15,7 @@
         <div class="projetos-container">
             <!-- Usando o async pipe para automaticamente renderizar os dados do observable -->
             <div class="projeto" *ngFor="let projeto of projects">
-                <span>{{ projeto.title }}</span>
+                <span [routerLink]="['/projects', projeto.id]" routerLinkActive="active">{{ projeto.title }}</span>
                 <div class="acoes">
                     <!-- Botão de Editar -->
                     <button class="editar" (click)="editProject(projeto.id)">

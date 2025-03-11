@@ -16,18 +16,8 @@ export const routes: Routes = [
     component: LoginComponent,
     title: 'Login - Worksync',
   },
-  {
-    path: 'projects',
-    component: ProjectsComponent,
-    canActivate: [AuthGuard],
-    title: 'Projetos - Worksync',
-    children: [
-      {
-        path: ':projectId',
-        component: ViewProjectComponent,
-      },
-    ],
-  },
+  { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard], title: 'Projetos - Worksync' },
+  { path: 'projects/:projectId', component: ViewProjectComponent, canActivate: [AuthGuard], title: 'Projeto - Worksync', },
   { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard], title: 'Tarefas - Worksync',
     children: [
       {
