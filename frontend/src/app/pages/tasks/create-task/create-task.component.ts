@@ -101,7 +101,7 @@ export class CreateTaskComponent {
     );
 
     this.errorMessage =
-      'error' in response ? translateError(response.error.message) : '';
+      'error' in response && response.error ? translateError(response.error.message) : '';
     if (!this.errorMessage) {
       alert('Tarefa criada com sucesso!');
       this.router.navigate(['/tasks']);

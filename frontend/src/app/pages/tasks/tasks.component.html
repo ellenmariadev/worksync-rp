@@ -34,8 +34,11 @@
                     </span>
                 </span>
                 <span class="col acoes">
+                      <button class="editar" (click)="goToEditTask(task.id)">
+                        <span class="material-icons edit"> edit </span>
+                    </button>
                     <button class="excluir" (click)="deleteTask(task.id)">
-                        <span class="material-icons delete">delete</span>
+                      <span class="material-icons delete">delete</span>
                     </button>
                 </span>
             </div>
