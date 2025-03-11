@@ -44,7 +44,7 @@
         </div>
         <div class="rows" *ngFor="let task of tasks">
           <p class="task-title"><a [routerLink]="['/tasks', task.id]">{{ task.title }}</a></p>
-          <p class="status">{{ translateStatus(task.status) }}</p>
+          <p class="status">{{ translateStatus(task?.status) }}</p>
           <p><span class="material-icons delete" (click)="deleteTask(task.id)"> delete_outline </span>
         </div>
       </div>

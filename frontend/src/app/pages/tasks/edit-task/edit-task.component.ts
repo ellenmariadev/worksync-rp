@@ -58,7 +58,7 @@ export class EditTaskComponent implements OnInit {
 
   loadTask() {
     this.loading = true;
-    this.taskService.getTaskById(this.taskId).subscribe({
+    this.taskService.getTaskById(this.taskId.toString()).subscribe({
       next: (task) => {
         this.taskForm.patchValue(task);
         this.loading = false;

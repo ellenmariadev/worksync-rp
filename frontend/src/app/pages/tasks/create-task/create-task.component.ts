@@ -42,7 +42,7 @@ export class CreateTaskComponent {
       projectId: ['', Validators.required],
       status: ['NOT_STARTED', Validators.required],
       startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      completionDate: ['', Validators.required],
       deadline: ['', Validators.required],
       responsibleId: ['', Validators.required]
     });
@@ -83,7 +83,7 @@ export class CreateTaskComponent {
       description,
       status,
       startDate,
-      endDate,
+      completionDate,
       deadline,
       responsibleId,
       projectId,
@@ -94,7 +94,7 @@ export class CreateTaskComponent {
       description,
       status,
       startDate,
-      endDate,
+      completionDate,
       deadline,
       parseInt(projectId),
       parseInt(projectId)

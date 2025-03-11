@@ -1,12 +1,12 @@
 <app-navbar></app-navbar>
 
-<main>
+<main *ngIf="task">
   <a href="/tasks">
     <span class="material-icons goback"> arrow_back </span>
   </a>
   <div class="container">
     <div class="title">
-      <h1>Documentação</h1>
+      <h1>{{ task.title }}</h1>
       <span class="material-icons edit"> edit </span>
     </div>
     <section class="info">
@@ -15,21 +15,21 @@
           <span class="material-icons"> start </span>
           <div class="flex first-list">
             <h2>Início</h2>
-            <p>May, 15 2022 14:23 PM</p>
+            <p>{{ formatDate(task.startDate || "") }}</p>
           </div>
         </li>
         <li>
           <span class="material-icons"> insert_invitation </span>
           <div class="flex first-list">
             <h2>Prazo</h2>
-            <p>May, 15 2022 14:23 PM</p>
+            <p>{{ formatDate(task.deadline || "") }}</p>
           </div>
         </li>
         <li>
           <span class="material-icons"> last_page </span>
           <div class="flex first-list">
             <h2>Fim</h2>
-            <p>May, 15 2022 14:23 PM</p>
+            <p>{{ formatDate(task.completionDate || "") }}</p>
           </div>
         </li>
       </ul>
@@ -38,21 +38,21 @@
           <span class="material-icons user"> person_outline </span>
           <div class="flex second-list">
             <h2>Responsável</h2>
-            <p class="tags">Usuário 1</p>
+            <p class="tags">{{ responsibleName }}</p>
           </div>
         </li>
         <li>
           <span class="material-icons"> check_circle_outline </span>
           <div class="flex second-list">
             <h2>Status</h2>
-            <p class="status">Em andamento</p>
+            <p class="status">{{ translateStatus(task.status || "") }}</p>
           </div>
         </li>
         <li>
           <span class="material-icons"> edit_note </span>
           <div class="flex second-list">
             <h2>Projeto</h2>
-            <p class="info-projects">Team projects</p>
+            <p class="info-projects">{{ task.projectName || "" }}</p>
           </div>
         </li>
       </ul>
@@ -61,31 +61,43 @@
     <section class="description">
       <h3 class="subtitle">Descrição</h3>
       <div class="description-content">
-        <textarea readonly>
- ..........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................</textarea
-        >
+        <textarea readonly>{{ task.description || "" }}</textarea>
       </div>
       <div class="line"></div>
     </section>
     <section class="comments">
       <h3 class="subtitle">Comentários</h3>
-      <div class="input-container">
+      <form
+        class="input-container"
+        [formGroup]="commentForm"
+        (ngSubmit)="onSubmit()"
+      >
         <input
+          formControlName="description"
           class="input-comment"
           type="text"
           placeholder="Escreva aqui..."
         />
-        <button class="btn-send-comment">
+        <button type="submit" class="btn-send-comment">
           <span class="material-icons"> send </span>
         </button>
-      </div>
-      <div class="comments-card">
+      </form>
+      <div class="comments-card" *ngFor="let comment of comments">
         <div class="circle"></div>
-        <div>
-          <h4 class="username">User 1</h4>
-          <p class="comment-content">
-            Olá quero tirar uma dúvida sobre o prazo da minha atividade.
-          </p>
+        <div class="comment-grid">
+          <div>
+            <h4 class="username">{{ username }}</h4>
+            <p class="comment-description">
+              {{ comment?.description }}
+            </p>
+          </div>
+          <button
+            *ngIf="userId === comment.userId"
+            (click)="deleteComment(comment.id)"
+            class="btn-delete-comment"
+          >
+            <span class="material-icons delete">delete</span>
+          </button>
         </div>
       </div>
     </section>

@@ -24,7 +24,7 @@ export class TaskService {
     description: string,
     status: string,
     startDate: string,
-    endDate: string,
+    completionDate: string,
     deadline: string,
     responsibleId: number,
     projectId: number
@@ -38,7 +38,7 @@ export class TaskService {
             description,
             status,
             startDate,
-            endDate,
+            completionDate,
             deadline,
             responsibleId,
             projectId,
@@ -74,7 +74,7 @@ export class TaskService {
     }
   }
 
-  getTaskById(id: number): Observable<any> {
+  getTaskById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`, {
       headers: this.getAuthHeaders(),
     });

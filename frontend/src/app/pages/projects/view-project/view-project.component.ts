@@ -9,6 +9,7 @@ import { UserService } from '../../../services/user.service';
 import { TaskService } from '../../../services/tasks.service';
 import { FormsModule } from '@angular/forms';
 import { ProjectDTO } from '../../../services/types/project';
+import { translateStatus } from '../../../utils/translateStatus';
 
 @Component({
   selector: 'app-view-project',
@@ -36,6 +37,10 @@ export class ViewProjectComponent implements OnInit {
     this.projectId = this.router.snapshot.paramMap.get('projectId')!;
     this.getProject();
     this.getTasks();
+  }
+
+  translateStatus(status: string): string {
+    return translateStatus(status);
   }
 
   getProject(): void {
@@ -70,15 +75,6 @@ export class ViewProjectComponent implements OnInit {
         console.error('Erro ao carregar tarefas:', error);
       }
     );
-  }
-
-  translateStatus(status: string): string {
-    const statusMap: { [key: string]: string } = {
-      'NOT_STARTED': 'Não Iniciada',
-      'IN_PROGRESS': 'Em Progresso',
-      'DONE': 'Concluída',
-    };
-    return statusMap[status] || status;
   }
 
   deleteTask(taskId: number): void {
