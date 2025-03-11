@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { ErrorMessage } from './types/error';
-import { start } from 'repl';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +9,17 @@ import { start } from 'repl';
 export class TaskService {
   private apiUrl = 'http://localhost:8080/tasks';
 
-  tasks: any[] = [];
-
   constructor(private http: HttpClient) {}
 
-  createTask(
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token não encontrado. Usuário não autenticado.');
+    }
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
+  async createTask(
     title: string,
     description: string,
     status: string,
@@ -23,13 +28,10 @@ export class TaskService {
     deadline: string,
     responsibleId: number,
     projectId: number
-  ): Promise<{ error: ErrorMessage } | Response> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return new Promise((resolve, _) => {
-      this.http
-        .post(
+  ): Promise<{ error?: ErrorMessage } | Response> {
+    try {
+      const response = await lastValueFrom(
+        this.http.post(
           `${this.apiUrl}`,
           {
             title,
@@ -41,37 +43,71 @@ export class TaskService {
             responsibleId,
             projectId,
           },
-          { headers }
+          { headers: this.getAuthHeaders() }
         )
-        .subscribe(
-          (response) => {
-            resolve(response as Response);
-          },
-          (error) => {
-            const errorMessage: ErrorMessage = error.error;
-            console.log(errorMessage);
-            resolve({ error: errorMessage });
-          }
-        );
-    });
+      );
+      console.log('Tarefa criada com sucesso:', response);
+      return response as Response;
+    } catch (error: any) {
+      console.error(
+        'Erro ao criar tarefa:',
+        error.status,
+        error.message,
+        error.error
+      );
+      return { error: error.error };
+    }
   }
 
   getTasksByProject(projectId: number): Observable<any[]> {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      console.log('Token nÃ£o encontrado');
+    try {
+      return this.http.get<any[]>(`${this.apiUrl}/projects/${projectId}`, {
+        headers: this.getAuthHeaders(),
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error('Unknown error occurred');
+      }
       return new Observable();
     }
+  }
 
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<any[]>(`${this.apiUrl}/projects/${projectId}`, { headers });
+  getTaskById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  async updateTask(
+    id: number,
+    updatedTask: any
+  ): Promise<{ error?: ErrorMessage } | Response> {
+    try {
+      console.log('Atualizando tarefa...', updatedTask);  // Log para depuração
+      const response = await lastValueFrom(
+        this.http.patch(`${this.apiUrl}/${id}`, updatedTask, {
+          headers: this.getAuthHeaders(),
+        })
+      );
+      console.log(`Tarefa ${id} atualizada com sucesso.`, response);  // Log para verificar o sucesso da resposta
+      return response as Response;
+    } catch (error: any) {
+      console.error(
+        `Erro ao atualizar tarefa ${id}:`,
+        error.status,
+        error.message,
+        error.error
+      );
+      return { error: error.error };
+    }
   }
 
 
-
   deleteTask(id: number): Observable<void> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }

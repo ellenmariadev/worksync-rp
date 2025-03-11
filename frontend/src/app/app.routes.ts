@@ -9,6 +9,7 @@ import { CreateTaskComponent } from './pages/tasks/create-task/create-task.compo
 import { ViewProjectComponent } from './pages/projects/view-project/view-project.component';
 import { ViewTaskComponent } from './pages/tasks/view-task/view-task.component';
 import { CreateProjectComponent } from './pages/projects/create-project/create-project.component';
+import { EditTaskComponent } from './pages/tasks/edit-task/edit-task.component'; 
 
 export const routes: Routes = [
   {
@@ -40,8 +41,31 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     title: 'Tarefa - Worksync',
   },
-  { path: 'create-task', component: CreateTaskComponent, canActivate: [AuthGuard], title: 'Criar Tarefa - Worksync' },
-  { path: 'register', component: RegisterComponent, title: 'Cadastrar - Worksync' },
-  { path: 'create-project', component: CreateProjectComponent, canActivate: [AuthGuard], title: 'Criar projeto - Worksync' },
-  { path: '**', redirectTo: '/login' },
+  {
+    path: 'tasks/edit/:taskId',
+    component: EditTaskComponent,
+    canActivate: [AuthGuard],
+    title: 'Editar Tarefa - Worksync',
+  },
+  {
+    path: 'create-task',
+    component: CreateTaskComponent,
+    canActivate: [AuthGuard],
+    title: 'Criar Tarefa - Worksync'
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    title: 'Cadastrar - Worksync'
+  },
+  {
+    path: 'create-project',
+    component: CreateProjectComponent,
+    canActivate: [AuthGuard],
+    title: 'Criar projeto - Worksync'
+  },
+  {
+    path: '**',
+    redirectTo: '/login'
+  },
 ];
