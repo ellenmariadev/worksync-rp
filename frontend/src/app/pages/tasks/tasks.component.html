@@ -5,11 +5,16 @@
     <h1>Tarefas</h1>
     <div class="container">
         <div class="flex">
+            <!-- Campo de busca por título -->
             <div class="search-bar">
                 <span class="material-icons search">search</span>
-                <input class="search" type="text" placeholder="Buscar tarefa...">
+                <input class="search" type="text" placeholder="Buscar tarefa..." (input)="onSearchChange($event)">
             </div>
-            <button class="btn-menu">&#9776;</button>
+
+            <!-- Filtros de data -->
+            <input type="date" (change)="onStartDateChange($event)" placeholder="Data início">
+            <input type="date" (change)="onEndDateChange($event)" placeholder="Data fim">
+
             <button (click)="goToCreateTask()" class="btn-criar-tarefa">+ Tarefa</button>
         </div>
 
@@ -17,13 +22,15 @@
             <div class="tabela-header">
                 <span class="col">Tarefa</span>
                 <span class="col">Projeto</span>
+                <span class="col">Data Início</span>
                 <span class="col">Status</span>
                 <span class="col">Ações</span>
             </div>
 
-            <div class="tabela-linha" *ngFor="let task of tasks">
+            <div class="tabela-linha" *ngFor="let task of filteredTasks">
                 <span class="col">{{ task.title }}</span>
                 <span class="col">{{ task.projectName }}</span>
+                <span class="col">{{ task.startDate }}</span>
                 <span class="col">
                     <span class="status" [ngClass]="{
                         'status-pendente': task.status === 'Pendente',
@@ -34,11 +41,11 @@
                     </span>
                 </span>
                 <span class="col acoes">
-                      <button class="editar" (click)="goToEditTask(task.id)">
-                        <span class="material-icons edit"> edit </span>
+                    <button class="editar" (click)="goToEditTask(task.id)">
+                      <span class="material-icons edit">editar</span>
                     </button>
                     <button class="excluir" (click)="deleteTask(task.id)">
-                      <span class="material-icons delete">delete</span>
+                        <span class="material-icons delete">delete</span>
                     </button>
                 </span>
             </div>
