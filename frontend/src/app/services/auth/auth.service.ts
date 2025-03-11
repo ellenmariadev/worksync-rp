@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../types/user';
+import { User, UserDTO } from '../types/user';
 import { ErrorMessage } from '../types/error';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';

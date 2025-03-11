@@ -1,10 +1,20 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { TaskService } from '../../services/auth/tasks/tasks.service';
+import { TaskService } from '../../services/tasks.service';
 import { Router } from '@angular/router';
 import { translateError } from '../../utils/translateErrors';
+import { ProjectsService } from '../../services/project.service';
+import { ProjectDTO } from '../../services/types/project';
+import { AuthService } from '../../services/auth/auth.service';
+import { UserDTO } from '../../services/types/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-create-task',
@@ -16,7 +26,12 @@ import { translateError } from '../../utils/translateErrors';
 export class CreateTaskComponent {
   taskForm: FormGroup;
   errorMessage: string = '';
-  private taskService = inject(TaskService);
+  projects: ProjectDTO[] = [];
+  users: UserDTO[] = [];
+
+  private tasksService = inject(TaskService);
+  private projectsService = inject(ProjectsService);
+  private usersService = inject(UserService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
 
@@ -37,34 +52,59 @@ export class CreateTaskComponent {
     return this.taskForm.controls;
   }
 
+  ngOnInit(): void {
+    this.projectsService.getAllProjects().subscribe(
+      (data) => {
+        this.projects = data;
+      },
+      (error) => {
+        console.error('Erro ao carregar projetos', error);
+      }
+    );
+
+    this.usersService.getAllUsers().subscribe(
+      (data) => {
+        this.users = data;
+      },
+      (error) => {
+        console.error('Erro ao carregar usuários', error);
+      }
+    );
+  }
+
   async onSubmit(): Promise<void> {
     if (this.taskForm.invalid) {
       this.errorMessage = 'Preencha todos os campos corretamente.';
       return;
     }
 
-    const { title, description, status, startDate, endDate, deadline, responsibleId, projectId } = this.taskForm.value;
+    const {
+      title,
+      description,
+      status,
+      startDate,
+      endDate,
+      deadline,
+      responsibleId,
+      projectId,
+    } = this.taskForm.value;
 
-    try {
-      const response = await this.taskService.createTask({
-        title,
-        description,
-        status,
-        startDate,
-        endDate,
-        deadline,
-        responsibleId: parseInt(responsibleId),
-        projectId: parseInt(projectId),
-      }).toPromise(); 
+    const response = await this.tasksService.createTask(
+      title,
+      description,
+      status,
+      startDate,
+      endDate,
+      deadline,
+      parseInt(projectId),
+      parseInt(projectId)
+    );
 
-      this.errorMessage = response?.error ? translateError(response.error.message) : '';
-
-      if (!this.errorMessage) {
-        alert('Tarefa criada com sucesso!');
-        this.router.navigate(['/tasks']);
-      }
-    } catch (error) {
-      this.errorMessage = 'Erro ao criar tarefa!';
+    this.errorMessage =
+      'error' in response ? translateError(response.error.message) : '';
+    if (!this.errorMessage) {
+      alert('Tarefa criada com sucesso!');
+      this.router.navigate(['/tasks']);
     }
   }
 }

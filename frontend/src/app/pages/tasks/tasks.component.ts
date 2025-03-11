@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { TaskService } from '../../services/auth/tasks/tasks.service';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { TaskService } from '../../services/tasks.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
@@ -13,7 +13,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 })
 export class TasksComponent implements OnInit {
   tasks: any[] = [];
-
+  private router = inject(Router);
   constructor(private taskService: TaskService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
@@ -42,5 +42,9 @@ export class TasksComponent implements OnInit {
         },
       });
     }
+  }
+
+  goToCreateTask(): void {
+    this.router.navigate(['/create-task']);
   }
 }
