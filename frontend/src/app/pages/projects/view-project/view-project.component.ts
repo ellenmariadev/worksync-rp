@@ -22,8 +22,7 @@ export class ViewProjectComponent implements OnInit {
   projectId!: string;
   project: ProjectDTO | null = null;
   tasks: any[] = [];
-  participantNames: { [key: number]: string } = {}; // Mapeia ID -> Nome
-  taskResponsibleNames: { [key: number]: string } = {}; // Mapeia ID -> Nome do responsável
+  participantNames: { [key: number]: string } = {};
 
   constructor(
     private router: ActivatedRoute,
@@ -66,16 +65,6 @@ export class ViewProjectComponent implements OnInit {
     this.taskService.getTasksByProject(Number(this.projectId)).subscribe(
       (tasks) => {
         this.tasks = tasks;
-        tasks.forEach((task) => {
-          this.userService.getUserById(task.responsibleId).subscribe(
-            (user) => {
-              this.taskResponsibleNames[task.responsibleId] = user.name;
-            },
-            (error) => {
-              console.error(`Erro ao buscar responsável ${task.responsibleId}:`, error);
-            }
-          );
-        });
       },
       (error) => {
         console.error('Erro ao carregar tarefas:', error);
@@ -87,7 +76,7 @@ export class ViewProjectComponent implements OnInit {
     const statusMap: { [key: string]: string } = {
       'NOT_STARTED': 'Não Iniciada',
       'IN_PROGRESS': 'Em Progresso',
-      'DONE': 'Concluída'
+      'DONE': 'Concluída',
     };
     return statusMap[status] || status;
   }
@@ -96,7 +85,7 @@ export class ViewProjectComponent implements OnInit {
     if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
       this.taskService.deleteTask(taskId).subscribe(
         () => {
-          this.tasks = this.tasks.filter(task => task.id !== taskId); 
+          this.tasks = this.tasks.filter((task) => task.id !== taskId);
         },
         (error) => {
           console.error('Erro ao excluir a tarefa:', error);
