@@ -15,6 +15,7 @@ import { ProjectDTO } from '../../../services/types/project';
   imports: [CommonModule, RouterModule, NavbarComponent, ReactiveFormsModule, FormsModule],
   templateUrl: './view-project.component.html',
   styleUrl: './view-project.component.css',
+  imports: [NavbarComponent],
 })
 
 export class ViewProjectComponent implements OnInit {

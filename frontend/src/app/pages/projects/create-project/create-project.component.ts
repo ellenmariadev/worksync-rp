@@ -6,6 +6,7 @@ import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { ProjectsService } from '../../../services/project.service';
 import { UserService } from '../../../services/user.service';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-create-project',
@@ -70,7 +71,7 @@ export class CreateProjectComponent implements OnInit {
 
     // Verifica se o usuário já está na lista de participantes
     const alreadyAdded = this.participants.some(user => user.id === this.selectedUserId);
-    
+
     if (alreadyAdded) {
       alert('Erro: Este participante já foi adicionado!');
       return;

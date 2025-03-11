@@ -6,15 +6,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { TaskService } from '../../services/tasks.service';
+import { NavbarComponent } from '../../../components/navbar/navbar.component';
+import { TaskService } from '../../../services/tasks.service';
 import { Router } from '@angular/router';
-import { translateError } from '../../utils/translateErrors';
-import { ProjectsService } from '../../services/project.service';
-import { ProjectDTO } from '../../services/types/project';
-import { AuthService } from '../../services/auth/auth.service';
-import { UserDTO } from '../../services/types/user';
-import { UserService } from '../../services/user.service';
+import { translateError } from '../../../utils/translateErrors';
+import { ProjectsService } from '../../../services/project.service';
+import { ProjectDTO } from '../../../services/types/project';
+import { AuthService } from '../../../services/auth/auth.service';
+import { UserDTO } from '../../../services/types/user';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-create-task',
