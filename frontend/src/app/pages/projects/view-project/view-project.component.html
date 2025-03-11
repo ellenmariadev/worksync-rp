@@ -8,7 +8,7 @@
   <div class="container">
     <div class="title">
       <h1>{{ project?.title }}</h1>
-      <span class="material-icons edit"> edit </span>
+      <span class="material-icons edit" (click)="editProject()"> edit </span>
     </div>
     <section class="info">
       <ul class="info-list">
@@ -17,7 +17,7 @@
             <span class="material-icons user"> person_outline </span>
             <h2>Responsável</h2>
           </div>
-          <p class="tags">{{ taskResponsibleNames[tasks[0]?.responsibleId] || 'Carregando...' }}</p>
+          <p class="tags">{{ taskResponsibleNames[tasks[0]?.responsibleId] || 'Nenhum Responsável' }}</p>
         </li>
         <li>
           <div class="flex">
@@ -26,8 +26,9 @@
           </div>
           <div class="participants">
             <button class="btn-participant">+</button>
-            <p class="tags" *ngFor="let participantId of project?.participantIds ?? []">
-              {{ participantNames[participantId] || 'Carregando...' }}
+            <p class="tags" *ngIf="!project?.participantIds?.length">Nenhum Participante</p>
+            <p class="tags" *ngFor="let participantId of project?.participantIds">
+              {{ participantNames[participantId] }}
             </p>
           </div>
         </li>
@@ -50,8 +51,8 @@
         </div>
         <div class="rows" *ngFor="let task of tasks">
           <p class="task-title"><a [routerLink]="['/tasks', task.id]">{{ task.title }}</a></p>
-          <p class="status">{{ task.status }}</p>
-          <p><span class="material-icons delete"> delete_outline </span></p>
+          <p class="status">{{ translateStatus(task.status) }}</p>
+          <p><span class="material-icons delete" (click)="deleteTask(task.id)"> delete_outline </span>
         </div>
       </div>
     </section>

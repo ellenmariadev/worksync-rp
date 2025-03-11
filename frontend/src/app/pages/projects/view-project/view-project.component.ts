@@ -29,7 +29,8 @@ export class ViewProjectComponent implements OnInit {
     private router: ActivatedRoute,
     private projectsService: ProjectsService,
     private userService: UserService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private navigation: Router
   ) {}
 
   ngOnInit(): void {
@@ -80,5 +81,33 @@ export class ViewProjectComponent implements OnInit {
         console.error('Erro ao carregar tarefas:', error);
       }
     );
+  }
+
+  translateStatus(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'NOT_STARTED': 'Não Iniciada',
+      'IN_PROGRESS': 'Em Progresso',
+      'DONE': 'Concluída'
+    };
+    return statusMap[status] || status;
+  }
+
+  deleteTask(taskId: number): void {
+    if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+      this.taskService.deleteTask(taskId).subscribe(
+        () => {
+          this.tasks = this.tasks.filter(task => task.id !== taskId); 
+        },
+        (error) => {
+          console.error('Erro ao excluir a tarefa:', error);
+        }
+      );
+    }
+  }
+
+  editProject(): void {
+    if (this.projectId) {
+      this.navigation.navigate([`/edit-project/${this.projectId}`]);
+    }
   }
 }

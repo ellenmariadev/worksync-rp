@@ -1,0 +1,98 @@
+.container {
+    font-family: 'Inter', sans-serif;
+    padding: 20px;
+    background: #ffffff;
+  }
+  
+  .page-title {
+    text-align: left;
+    margin-bottom: 30px;
+    color: #482b83;
+  }
+  
+  .form-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-section {
+    width: 48%;
+  }
+  
+  .form-left, .form-right {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .title-project, .description-project {
+    margin-bottom: 15px;
+  }
+  
+  .input-field, .textarea-field {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 0 10px;
+  }
+  
+  .textarea-field {
+    height: 120px;
+  }
+  
+  .divider {
+    width: 2px;
+    background: #ddd;
+    height: 100%;
+    margin: 0 20px;
+  }
+  
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .user-chip {
+    padding: 8px 12px;
+    background: #6F27FE;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .add-btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    font-size: 14px; 
+    background: #6F27FE; 
+    color: #fff;
+    border: none;
+    border-radius: 6px; 
+    cursor: pointer;
+  }
+  
+  .save-btn-container {
+    text-align: right;
+    margin-top: 10px;
+    padding: 20px 20px 20px 0;
+    background: #f8f8f8;
+    border-radius: 12px;
+    width: 100%;
+  }
+  
+  .save-btn {
+    padding: 10px 20px;
+    background: #6F27FE;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }

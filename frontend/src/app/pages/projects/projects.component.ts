@@ -36,7 +36,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   editProject(id: number): void {
-    this.router.navigate([`/projects/edit/${id}`]);  // Usando o Router para navegação
+    this.router.navigate([`/edit-project/${id}`]);  // Usando o Router para navegação
   }
 
   deleteProject(id: number): void {
