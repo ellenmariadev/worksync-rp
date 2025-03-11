@@ -14,6 +14,13 @@
       <ul class="info-list">
         <li>
           <div class="flex">
+            <span class="material-icons user"> person_outline </span>
+            <h2>Responsável</h2>
+          </div>
+          <p class="tags">{{ taskResponsibleNames[tasks[0]?.responsibleId] || 'Carregando...' }}</p>
+        </li>
+        <li>
+          <div class="flex">
             <span class="material-icons"> people_outline </span>
             <h2>Participantes</h2>
           </div>
@@ -41,9 +48,9 @@
           <h4 style="padding-left: 6.5rem">Tarefa</h4>
           <h4>Status</h4>
         </div>
-        <div class="rows">
-          <p class="task-title">Análise - Union</p>
-          <p class="status">Em andamento</p>
+        <div class="rows" *ngFor="let task of tasks">
+          <p class="task-title"><a [routerLink]="['/tasks', task.id]">{{ task.title }}</a></p>
+          <p class="status">{{ task.status }}</p>
           <p><span class="material-icons delete"> delete_outline </span></p>
         </div>
       </div>

@@ -60,15 +60,13 @@ export class TaskService {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      console.log('Token nÃ£o encontrado');
+      console.log('Token não encontrado');
       return new Observable();
     }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<any[]>(`${this.apiUrl}/projects/${projectId}`, { headers });
   }
-
-
 
   deleteTask(id: number): Observable<void> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
