@@ -83,4 +83,9 @@ export class TasksComponent implements OnInit {
   goToEditTask(taskId: number): void {
     this.router.navigate([`/tasks/edit/${taskId}`]);
   }
+
+  goToViewTask(taskId: number): void {
+    this.router.navigate([`/tasks/${taskId}`]);
+  }
 }
+

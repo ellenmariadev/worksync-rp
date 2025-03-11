@@ -28,7 +28,7 @@
             </div>
 
             <div class="tabela-linha" *ngFor="let task of filteredTasks">
-                <span class="col">{{ task.title }}</span>
+              <span class="col task-title" (click)="goToViewTask(task.id)">{{ task.title }}</span>
                 <span class="col">{{ task.projectName }}</span>
                 <span class="col">{{ task.startDate }}</span>
                 <span class="col">
