@@ -18,11 +18,13 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTasks();
+
   }
 
   loadTasks(): void {
     this.taskService.getTasksByProject(1).subscribe({
       next: (data) => {
+        console.log('Tarefas carregadas:', data);
         this.tasks = data;
         this.cdr.detectChanges(); // Força a atualização do Angular
       },
@@ -47,4 +49,9 @@ export class TasksComponent implements OnInit {
   goToCreateTask(): void {
     this.router.navigate(['/create-task']);
   }
+
+  goToEditTask(taskId: number): void {
+    this.router.navigate([`/tasks/edit/${taskId}`]);
+  }
+
 }

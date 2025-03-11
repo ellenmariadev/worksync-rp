@@ -154,3 +154,18 @@ h1 {
   background-color: #D4F7E7;
   color: #28a745;
 }
+
+.material-icons.edit {
+  color: rgba(179, 151, 51, 0.419);
+  font-size: 18px;
+}
+
+.material-icons.edit:hover {
+  color: rgba(179, 151, 51, 0.719);
+}
+
+.acoes button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
