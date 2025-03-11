@@ -9,7 +9,7 @@ import { CreateTaskComponent } from './pages/tasks/create-task/create-task.compo
 import { ViewProjectComponent } from './pages/projects/view-project/view-project.component';
 import { ViewTaskComponent } from './pages/tasks/view-task/view-task.component';
 import { CreateProjectComponent } from './pages/projects/create-project/create-project.component';
-import { EditTaskComponent } from './pages/tasks/edit-task/edit-task.component'; 
+import { EditTaskComponent } from './pages/tasks/edit-task/edit-task.component';
 import { EditProjectComponent } from './pages/projects/edit-project/edit-project.component';
 
 export const routes: Routes = [
@@ -42,6 +42,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     title: 'Tarefa - Worksync',
   },
+  { path: 'edit-project/:id', component: EditProjectComponent, canActivate: [AuthGuard], title: 'Editar Projeto - Worksync' },
   {
     path: 'tasks/edit/:taskId',
     component: EditTaskComponent,

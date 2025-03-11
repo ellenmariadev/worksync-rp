@@ -103,8 +103,6 @@ export class TaskService {
       return { error: error.error };
     }
   }
-
-
   deleteTask(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, {
       headers: this.getAuthHeaders(),
