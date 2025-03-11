@@ -163,3 +163,9 @@ h1 {
 .material-icons.edit:hover {
   color: rgba(179, 151, 51, 0.719);
 }
+
+.acoes button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
