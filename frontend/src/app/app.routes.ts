@@ -5,7 +5,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
-import { CreateTaskComponent } from './pages/create-task/create-task.component';
+import { CreateTaskComponent } from './pages/tasks/create-task/create-task.component';
 import { ViewProjectComponent } from './pages/projects/view-project/view-project.component';
 import { ViewTaskComponent } from './pages/tasks/view-task/view-task.component';
 import { CreateProjectComponent } from './pages/projects/create-project/create-project.component';
