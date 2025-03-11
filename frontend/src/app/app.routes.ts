@@ -10,6 +10,7 @@ import { ViewProjectComponent } from './pages/projects/view-project/view-project
 import { ViewTaskComponent } from './pages/tasks/view-task/view-task.component';
 import { CreateProjectComponent } from './pages/projects/create-project/create-project.component';
 import { EditTaskComponent } from './pages/tasks/edit-task/edit-task.component'; 
+import { EditProjectComponent } from './pages/projects/edit-project/edit-project.component';
 
 export const routes: Routes = [
   {
