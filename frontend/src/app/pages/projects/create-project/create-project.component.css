@@ -1,109 +1,103 @@
-/* Estilização geral */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .create-project-container {
-    background: white;
-    width: 80%;
-    max-width: 900px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-  }
-  
-  h2 {
-    color: #333;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  input, textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  textarea {
-    resize: none;
-    height: 100px;
-  }
-  
-  button {
-    background: #8000ff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  button:hover {
-    background: #5e00b3;
-  }
-  
-  /* Layout Responsável & Participantes */
-  .create-project-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  
-  .responsible-participants {
-    background: #f8f8f8;
-    padding: 15px;
-    border-radius: 8px;
-    flex: 1;
-    max-width: 40%;
-  }
-  
-  .responsible-participants h3 {
-    margin-bottom: 10px;
-  }
-  
-  .user-tag {
-    display: inline-block;
-    background: #d1b3ff;
-    padding: 5px 10px;
-    border-radius: 15px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: #4a00b3;
-    font-weight: bold;
-  }
-  
-  .add-user-button {
-    background: #e0e0e0;
-    color: #333;
-    padding: 5px 10px;
-    border-radius: 15px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .add-user-button:hover {
-    background: #d6d6d6;
-  }
+.goback {
+  padding: 2rem;
+  cursor: pointer;
+  font-size: 2rem;
+  color: #482b83;
+}
+
+.container {
+  max-width: 1500px;
+  padding-inline: 10rem;
+  margin: 0 auto;
+  color: #423F47;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.page-title {
+  text-align: left;
+  margin-bottom: 30px;
+  color: #423F47;
+}
+
+.form-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  background: #f8f8f8;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  width: 48%;
+  color: #82808F;
+}
+
+.form-left, .form-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-project, .description-project {
+  margin-bottom: 15px;
+  color: #82808F;
+}
+
+.input-field, .textarea-field {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin: 0 10px;
+}
+
+.textarea-field {
+  height: 120px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.user-chip {
+  padding: 8px 12px;
+  background: #6F27FE;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.add-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  font-size: 14px; 
+  background: #6F27FE; 
+  color: #fff;
+  border: none;
+  border-radius: 6px; 
+  cursor: pointer;
+}
+
+.save-btn-container {
+  text-align: right;
+  margin-top: 10px;
+  padding: 20px 20px 20px 0;
+  background: #f8f8f8;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.save-btn {
+  padding: 10px 20px;
+  background: #6F27FE;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
