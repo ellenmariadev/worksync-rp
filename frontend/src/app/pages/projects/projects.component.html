@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
+
+<main>
+    <h1>Projetos</h1>
+    <div class="container">
+        <div class="flex">
+            <div class="search-bar">
+                <span class="material-icons search">search</span>
+                <!-- Evento input chama a função onSearchChange -->
+                <input class="search" type="text" placeholder="Buscar projeto..." (input)="onSearchChange($event)">
+            </div>
+            <button class="btn-criar-projeto" routerLink="/create-project" routerLinkActive="active">+ Projeto</button>
+        </div>
+        <div class="projetos-container">
+            <!-- Usando o async pipe para automaticamente renderizar os dados do observable -->
+            <div class="projeto" *ngFor="let projeto of projects">
+                <span [routerLink]="['/projects', projeto.id]" routerLinkActive="active">{{ projeto.title }}</span>
+                <div class="acoes">
+                    <!-- Botão de Editar -->
+                    <button class="editar" (click)="editProject(projeto.id)">
+                        <span class="material-icons edit">edit</span>
+                    </button>
+                    <!-- Botão de Excluir -->
+                    <button class="excluir" (click)="deleteProject(projeto.id)">
+                        <span class="material-icons delete">delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

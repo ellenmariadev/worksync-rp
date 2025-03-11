@@ -1,0 +1,94 @@
+<app-navbar></app-navbar>
+
+<a href="/tasks">
+  <span class="material-icons goback"> arrow_back </span>
+</a>
+<h1 class="page-title">Crie sua tarefa</h1>
+
+<main class="main">
+  <div class="container">
+    <form class="task-form" [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+      <div class="form-left">
+        <div class="title-task">
+          <label for="title">Título da tarefa:</label>
+          <input
+            id="title"
+            type="text"
+            formControlName="title"
+            class="input-field"
+          />
+        </div>
+
+        <div class="description-task">
+          <label for="description">Descreva sua tarefa:</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            class="textarea-field"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-right">
+        <h3>Defina as datas:</h3>
+        <div class="date-field">
+          <div style="display: flex">
+            <span class="material-icons"> start </span>
+            <p class="date-name">Início</p>
+          </div>
+          <input formControlName="startDate" type="date" id="fromDate" />
+        </div>
+
+        <div class="date-field">
+          <div style="display: flex">
+            <span class="material-icons"> last_page </span>
+            <p class="date-name">Fim</p>
+          </div>
+          <input formControlName="completionDate" type="date" id="completionDate" />
+        </div>
+
+        <div class="date-field">
+          <div style="display: flex">
+            <span class="material-icons"> insert_invitation </span>
+            <p class="date-name">Prazo</p>
+          </div>
+          <input formControlName="deadline" type="date" id="deadline" />
+        </div>
+
+        <hr class="hr-separator" />
+
+        <h3>Defina o projeto e o responsável</h3>
+
+        <div class="info-field">
+          <div style="display: flex">
+            <span class="material-icons"> edit_note </span>
+            <p class="info-name">Projeto</p>
+          </div>
+          <select formControlName="projectId" id="projectId">
+            <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
+          </select>
+        </div>
+
+        <div class="info-field">
+          <div style="display: flex">
+            <span class="material-icons user"> person_outline </span>
+            <p class="info-name">Responsável</p>
+          </div>
+          <select formControlName="responsibleId" id="responsibleId">
+            <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
+          </select>
+        </div>
+
+        <div class="info-field">
+          <span class="material-icons"> check_circle_outline </span>
+          <p class="info-name">Status</p>
+          <span class="info-status">Não iniciada</span>
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="create-button">Criar</button>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      </div>
+    </form>
+  </div>
+</main>

@@ -1,0 +1,70 @@
+<app-navbar></app-navbar>
+
+<div class="header">
+  <button class="back-button">←</button>
+</div>
+
+<main>
+  <h1 class="page-title">Crie sua tarefa</h1>
+
+  <div class="container" [formGroup]="taskForm"> 
+    <div class="task-form">
+      <div class="form-left">
+        <div class="title-task">
+          <label for="title">Título da tarefa:</label>
+          <input id="title" type="text" formControlName="title" class="input-field" />
+        </div>
+
+        <div class="description-task">
+          <label for="description">Descreva sua tarefa:</label>
+          <textarea id="description" formControlName="description" class="textarea-field"></textarea>
+        </div>
+      </div>
+
+      <div class="form-right">
+        <h3>Defina as datas:</h3>
+        <div class="date-field">
+          <span class="date-icon">⏳</span>
+          <span class="date-name">Início</span>
+          <input type="date" formControlName="startDate" class="date-input" />
+        </div>
+
+        <div class="date-field">
+          <span class="date-icon">➡️</span>
+          <span class="date-name">Fim</span>
+          <input type="date" formControlName="endDate" class="date-input" />
+        </div>
+
+        <div class="date-field">
+          <span class="date-icon">📅</span>
+          <span class="date-name">Prazo</span>
+          <input type="date" formControlName="deadline" class="date-input" />
+        </div>
+
+        <hr class="hr-separator" />
+
+        <h3>Defina o projeto e o responsável:</h3>
+
+        <!-- Projeto - Acessando o campo project.title -->
+        <div class="info-field">
+          <span class="info-icon">📂</span>
+          <label for="project" class="info-name">Projeto</label>
+          <select id="project" formControlName="projectId" class="select-field">
+            <option *ngFor="let project of projects" [value]="project.id">{{ project.title }}</option>
+          </select>
+        </div>
+
+        <!-- Responsável - Acessando o campo user.name -->
+        <div class="info-field">
+          <span class="info-icon">👤</span>
+          <label for="responsible" class="info-name">Responsável</label>
+          <select id="responsible" formControlName="responsibleId" class="select-field">
+            <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button (click)="editTask()" class="save-button">Salvar</button>
+  </div>
+</main>

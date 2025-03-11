@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
+
+<main>
+    <h1>Tarefas</h1>
+    <div class="container">
+        <div class="flex">
+            <!-- Campo de busca por título -->
+            <div class="search-bar">
+                <span class="material-icons search">search</span>
+                <input class="search" type="text" placeholder="Buscar tarefa..." (input)="onSearchChange($event)">
+            </div>
+
+            <!-- Filtros de data -->
+            <input type="date" (change)="onStartDateChange($event)" placeholder="Data início">
+            <input type="date" (change)="onEndDateChange($event)" placeholder="Data fim">
+
+            <button (click)="goToCreateTask()" class="btn-criar-tarefa">+ Tarefa</button>
+        </div>
+
+        <div class="tabela-tarefas">
+            <div class="tabela-header">
+                <span class="col">Tarefa</span>
+                <span class="col">Projeto</span>
+                <span class="col">Data Início</span>
+                <span class="col">Status</span>
+                <span class="col">Ações</span>
+            </div>
+
+            <div class="tabela-linha" *ngFor="let task of filteredTasks">
+              <span class="col task-title" (click)="goToViewTask(task.id)">{{ task.title }}</span>
+                <span class="col">{{ task.projectName }}</span>
+                <span class="col">{{ task.startDate }}</span>
+                <span class="col">
+                    <span class="status" [ngClass]="{
+                        'status-pendente': task.status === 'Pendente',
+                        'status-andamento': task.status === 'Em Andamento',
+                        'status-concluido': task.status === 'Concluído'
+                    }">
+                        {{ task.status }}
+                    </span>
+                </span>
+                <span class="col acoes">
+                    <button class="editar" (click)="goToEditTask(task.id)">
+                      <span class="material-icons edit">editar</span>
+                    </button>
+                    <button class="excluir" (click)="deleteTask(task.id)">
+                        <span class="material-icons delete">delete</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</main>

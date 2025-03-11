@@ -2,12 +2,22 @@ export type User = {
     id: number;
     email: string;
     password: string;
+    name: string;
     role: string;
+    sub?: string;
 }
 
-export type ErrorMessage = {
-  timestamp: string;
-  status: number;
-  error: string;
-  message: string;
+export type Authority = {
+  authority: string;
+}
+
+export type UserDTO = {
+  id: number;
+  role: string;
+  authorities: Authority[];
+  username: string;
+  enabled: boolean;
+  accountNonExpired: boolean;
+  credentialsNonExpired: boolean;
+  accountNonLocked: boolean;
 }
