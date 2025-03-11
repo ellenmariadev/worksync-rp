@@ -47,7 +47,6 @@ public class TaskService {
     }
 
     public TaskDTO updateTask(Long id, TaskDTO dto) {
-
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found!"));
 
@@ -97,7 +96,7 @@ public class TaskService {
         }
         taskRepository.deleteById(id);
     }
-
+    
     public List<TaskDTO> searchTasks(String title, LocalDate startDateMin, LocalDate startDateMax) {
         List<Task> tasks;
     
@@ -122,7 +121,8 @@ public class TaskService {
             task.getCompletionDate(),
             task.getDeadline(),
             task.getAssignedPerson() != null ? task.getAssignedPerson().getId() : null,
-            task.getProject() != null ? task.getProject().getId() : null
+            task.getProject() != null ? task.getProject().getId() : null,
+            task.getProject() != null ? task.getProject().getTitle() : null
         );
     }
 
@@ -142,6 +142,7 @@ public class TaskService {
         Project project = projectRepository.findById(dto.getProjectId())
                 .orElseThrow(() -> new NotFoundException("Project not found!"));
         task.setProject(project);
+        
         return task;
     }
 }

@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.worksync.dto.requests.TaskDTO;
+import com.example.worksync.exceptions.NotFoundException;
+import com.example.worksync.repository.TaskRepository;
 import com.example.worksync.service.TaskService;
 
 import jakarta.validation.Valid;
@@ -31,6 +32,8 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private TaskRepository taskRepository;
 
     @GetMapping("/projects/{projectId}")
     public ResponseEntity<List<TaskDTO>> listTasksByProject(@PathVariable Long projectId) {
@@ -64,10 +67,15 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
-        return ResponseEntity.ok("Task has been successfully deleted.");
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        if (!taskRepository.existsById(id)) {
+            throw new NotFoundException("Task not found!");
+        }
+        taskRepository.deleteById(id);
+        return ResponseEntity.noContent().build(); 
     }
+    
+    
 
     @GetMapping("/search")
     public ResponseEntity<?> searchTasks(

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+<<<<<<< HEAD
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -8,6 +9,9 @@ import { ProjectsService } from '../../../services/project.service';
 import { UserService } from '../../../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { ProjectDTO } from '../../../services/types/project';
+=======
+import { NavbarComponent } from '../../../components/navbar/navbar.component';
+>>>>>>> 730ae57638f89dc82c564d99ab6b4aa2aae3aad2
 
 @Component({
   selector: 'app-view-project',
@@ -15,6 +19,7 @@ import { ProjectDTO } from '../../../services/types/project';
   imports: [CommonModule, RouterModule, NavbarComponent, ReactiveFormsModule, FormsModule],
   templateUrl: './view-project.component.html',
   styleUrl: './view-project.component.css',
+  imports: [NavbarComponent],
 })
 
 export class ViewProjectComponent implements OnInit {
