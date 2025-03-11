@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/projects/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/email/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
                         .anyRequest().authenticated()
                 )
