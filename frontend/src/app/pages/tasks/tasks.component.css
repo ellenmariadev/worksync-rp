@@ -169,3 +169,13 @@ h1 {
   background: none;
   cursor: pointer;
 }
+
+.task-title {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.task-title:hover {
+  color: #0056b3;
+}
