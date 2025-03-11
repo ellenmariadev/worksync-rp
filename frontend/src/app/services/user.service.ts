@@ -22,4 +22,8 @@ export class UserService {
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
+
+  getUserByEmail(email: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/email/${email}`);
+  }
 }

@@ -1,6 +1,7 @@
 package com.example.worksync.service;
 
 import com.example.worksync.dto.requests.CommentDTO;
+import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.model.Comment;
 import com.example.worksync.model.Task;
 import com.example.worksync.model.User;
@@ -36,18 +37,17 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public CommentDTO addComment(CommentDTO commentDTO) {
+    public CommentDTO addComment(CommentDTO commentDTO, User user) {
         Optional<Task> taskOpt = taskRepository.findById(commentDTO.getTaskId());
-        Optional<User> userOpt = userRepository.findById(commentDTO.getUserId());
 
-        if (taskOpt.isEmpty() || userOpt.isEmpty()) {
-            throw new RuntimeException("Task or User not found!");
+        if (taskOpt.isEmpty()) {
+            throw new NotFoundException("Task not found!");
         }
 
         Comment comment = new Comment();
         comment.setDescription(commentDTO.getDescription());
         comment.setTask(taskOpt.get());
-        comment.setUser(userOpt.get());
+        comment.setUser(user);
         comment.setCreatedAt(LocalDateTime.now());
 
         comment = commentRepository.save(comment);

@@ -26,10 +26,10 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<CommentDTO> addComment(@RequestBody CommentDTO commentDTO, 
+    public ResponseEntity<CommentDTO> addComment(@RequestBody CommentDTO commentDTO,
                                                  @AuthenticationPrincipal User user) {
-        commentDTO.setUserId(user.getId()); 
-        CommentDTO newComment = commentService.addComment(commentDTO);
+
+        CommentDTO newComment = commentService.addComment(commentDTO, user);
         return ResponseEntity.ok(newComment);
     }
     
