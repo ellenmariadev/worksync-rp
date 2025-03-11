@@ -21,39 +21,22 @@
                 <span class="col">Ações</span>
             </div>
 
-            <div class="tabela-linha">
-                <span class="col">Criar Login</span>
-                <span class="col">Projeto Wave</span>
-                <span class="col"><span class="status status-pendente">Pendente</span></span>
-                <span class="col acoes">
-                    <button class="excluir"><span class="material-icons delete">delete</span></button>
+            <div class="tabela-linha" *ngFor="let task of tasks">
+                <span class="col">{{ task.title }}</span>
+                <span class="col">{{ task.projectName }}</span>
+                <span class="col">
+                    <span class="status" [ngClass]="{
+                        'status-pendente': task.status === 'Pendente',
+                        'status-andamento': task.status === 'Em Andamento',
+                        'status-concluido': task.status === 'Concluído'
+                    }">
+                        {{ task.status }}
+                    </span>
                 </span>
-            </div>
-
-            <div class="tabela-linha">
-                <span class="col">Criar Dashboard</span>
-                <span class="col">Projeto Obsidian</span>
-                <span class="col"><span class="status status-pendente">Pendente</span></span>
                 <span class="col acoes">
-                    <button class="excluir"><span class="material-icons delete">delete</span></button>
-                </span>
-            </div>
-
-            <div class="tabela-linha">
-                <span class="col">Revisar Design</span>
-                <span class="col">Projeto X</span>
-                <span class="col"><span class="status status-andamento">Em Andamento</span></span>
-                <span class="col acoes">
-                    <button class="excluir"><span class="material-icons delete">delete</span></button>
-                </span>
-            </div>
-
-            <div class="tabela-linha">
-                <span class="col">Publicar Site</span>
-                <span class="col">Projeto Y</span>
-                <span class="col"><span class="status status-concluido">Concluído</span></span>
-                <span class="col acoes">
-                    <button class="excluir"><span class="material-icons delete">delete</span></button>
+                    <button class="excluir" (click)="deleteTask(task.id)">
+                        <span class="material-icons delete">delete</span>
+                    </button>
                 </span>
             </div>
         </div>

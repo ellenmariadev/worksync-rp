@@ -37,14 +37,14 @@ export class CreateTaskComponent {
 
   constructor() {
     this.taskForm = this.fb.group({
-      title: [''],
-      description: [''],
-      projectId: [''],
-      status: ['NOT_STARTED'],
-      startDate: [''],
-      endDate: [''],
-      deadline: [''],
-      responsibleId: [''],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      projectId: ['', Validators.required],
+      status: ['NOT_STARTED', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      deadline: ['', Validators.required],
+      responsibleId: ['', Validators.required]
     });
   }
 
@@ -89,7 +89,7 @@ export class CreateTaskComponent {
       projectId,
     } = this.taskForm.value;
 
-    const response = await this.tasksService.register(
+    const response = await this.tasksService.createTask(
       title,
       description,
       status,

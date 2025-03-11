@@ -14,5 +14,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     boolean existsById(Long id);
     List<Task> findByTitleContainingIgnoreCase(String title);
     List<Task> findByStartDateBetween(LocalDate startDateMin, LocalDate startDateMax);
-    
+    List<Task> findTasksWithProjectNameByProjectId(Long projectId);
 }
