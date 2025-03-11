@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { ProjectsService } from '../../../services/project.service';
-import { UserService } from '../../../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 
