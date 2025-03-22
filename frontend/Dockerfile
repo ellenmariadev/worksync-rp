@@ -13,5 +13,5 @@ COPY --from=build /app/dist /app/dist
 COPY --from=build /app/package*.json ./
 RUN npm ci --only=production && npm cache clean --force
 
-EXPOSE 4000
+EXPOSE 10000
 CMD ["npm", "run", "serve:ssr:frontend"]
