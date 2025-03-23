@@ -41,3 +41,9 @@ jobs:
         with:
           name: worksync-jar
           path: backend/target/worksync-0.0.1-SNAPSHOT.jar
+      
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
