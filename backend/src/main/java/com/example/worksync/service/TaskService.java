@@ -6,9 +6,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.example.worksync.dto.requests.TaskDTO;
+import com.example.worksync.event.UserTaskAssignmentEvent;
 import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.model.Project;
 import com.example.worksync.model.Task;
@@ -22,13 +24,16 @@ public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
-    
+
     @Autowired
     private ProjectRepository projectRepository;
 
     @Autowired
     private UserRepository userRepository;
-    
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     public List<TaskDTO> listTasksByProject(Long projectId) {
         List<Task> tasks = taskRepository.findByProjectId(projectId);
         return tasks.stream()
@@ -43,6 +48,7 @@ public class TaskService {
     public TaskDTO createTask(TaskDTO dto) {
         Task task = convertToEntity(dto);
         task = taskRepository.save(task);
+        eventPublisher.publishEvent(new UserTaskAssignmentEvent(this, task.getAssignedPerson(), task));
         return convertToDTO(task);
     }
 
@@ -50,10 +56,16 @@ public class TaskService {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found!"));
 
+        User previousAssignedPerson = existingTask.getAssignedPerson();
+        boolean assignedPersonChanged = false;
+
         if (dto.getResponsibleId() != null) {
             User responsiblePerson = userRepository.findById(dto.getResponsibleId())
                     .orElseThrow(() -> new NotFoundException("Responsible person not found!"));
-            existingTask.setAssignedPerson(responsiblePerson);
+            if (!responsiblePerson.equals(previousAssignedPerson)) {
+                existingTask.setAssignedPerson(responsiblePerson);
+                assignedPersonChanged = true;
+            }
         }
 
         if (dto.getProjectId() != null) {
@@ -87,6 +99,11 @@ public class TaskService {
         }
 
         existingTask = taskRepository.save(existingTask);
+
+        if (assignedPersonChanged) {
+            eventPublisher.publishEvent(new UserTaskAssignmentEvent(this, existingTask.getAssignedPerson(), existingTask));
+        }        
+
         return convertToDTO(existingTask);
     }
     
