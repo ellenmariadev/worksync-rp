@@ -1,6 +1,5 @@
 package com.example.worksync.event;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +9,11 @@ import com.example.worksync.service.NotificationService;
 
 @Component
 public class UserTaskAssignmentListener {
-    @Autowired
-    private NotificationService notificationService;
+    private final NotificationService notificationService;
+
+    public UserTaskAssignmentListener(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
     @EventListener
     public void handleUserTaskAssignment(UserTaskAssignmentEvent event) {

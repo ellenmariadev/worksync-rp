@@ -2,7 +2,6 @@ package com.example.worksync.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,12 @@ import com.example.worksync.service.NotificationService;
 @RestController
 @RequestMapping("/notifications")
 public class NotificationController {
-    @Autowired
-    private NotificationService notificationService;
+
+    private final NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
     @GetMapping
     public List<Notification> getUnreadNotifications(@AuthenticationPrincipal User user) {
@@ -27,7 +30,7 @@ public class NotificationController {
     }
 
     @PostMapping("/{id}/read")
-        public ResponseEntity<Notification> markNotificationAsRead(@PathVariable Long id) {
+    public ResponseEntity<Notification> markNotificationAsRead(@PathVariable Long id) {
         Notification notification = notificationService.markAsRead(id);
         return ResponseEntity.ok(notification);
     }

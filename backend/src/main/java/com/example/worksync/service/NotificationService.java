@@ -2,7 +2,6 @@ package com.example.worksync.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.worksync.exceptions.NotFoundException;
@@ -12,8 +11,12 @@ import com.example.worksync.repository.NotificationRepostiory;
 
 @Service
 public class NotificationService {
-    @Autowired
-    private NotificationRepostiory notificationRepository;
+
+    private final NotificationRepostiory notificationRepository;
+
+    public NotificationService(NotificationRepostiory notificationRepository) {
+        this.notificationRepository = notificationRepository;
+    }
 
     public void createNotification(User user, String message, Long taskId) {
         Notification notification = new Notification(user, message, false, taskId);
@@ -27,7 +30,7 @@ public class NotificationService {
     public Notification markAsRead(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new NotFoundException("Notification not found"));
-        
+
         notification.markAsRead();
         notificationRepository.save(notification);
         return notification;
