@@ -6,9 +6,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.example.worksync.dto.requests.TaskDTO;
+import com.example.worksync.event.UserTaskAssignmentEvent;
 import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.model.Project;
 import com.example.worksync.model.Task;
@@ -20,15 +22,19 @@ import com.example.worksync.repository.UserRepository;
 @Service
 public class TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
-    
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
+    private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    @Autowired
-    private UserRepository userRepository;
-    
+    public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository,
+            UserRepository userRepository, ApplicationEventPublisher eventPublisher) {
+        this.taskRepository = taskRepository;
+        this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
+    }
+
     public List<TaskDTO> listTasksByProject(Long projectId) {
         List<Task> tasks = taskRepository.findByProjectId(projectId);
         return tasks.stream()
@@ -43,6 +49,7 @@ public class TaskService {
     public TaskDTO createTask(TaskDTO dto) {
         Task task = convertToEntity(dto);
         task = taskRepository.save(task);
+        eventPublisher.publishEvent(new UserTaskAssignmentEvent(this, task.getAssignedPerson(), task));
         return convertToDTO(task);
     }
 
@@ -50,10 +57,16 @@ public class TaskService {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found!"));
 
+        User previousAssignedPerson = existingTask.getAssignedPerson();
+        boolean assignedPersonChanged = false;
+
         if (dto.getResponsibleId() != null) {
             User responsiblePerson = userRepository.findById(dto.getResponsibleId())
                     .orElseThrow(() -> new NotFoundException("Responsible person not found!"));
-            existingTask.setAssignedPerson(responsiblePerson);
+            if (!responsiblePerson.equals(previousAssignedPerson)) {
+                existingTask.setAssignedPerson(responsiblePerson);
+                assignedPersonChanged = true;
+            }
         }
 
         if (dto.getProjectId() != null) {
@@ -87,19 +100,25 @@ public class TaskService {
         }
 
         existingTask = taskRepository.save(existingTask);
+
+        if (assignedPersonChanged) {
+            eventPublisher
+                    .publishEvent(new UserTaskAssignmentEvent(this, existingTask.getAssignedPerson(), existingTask));
+        }
+
         return convertToDTO(existingTask);
     }
-    
+
     public void deleteTask(Long id) {
         if (!taskRepository.existsById(id)) {
             throw new NotFoundException("Task not found!");
         }
         taskRepository.deleteById(id);
     }
-    
+
     public List<TaskDTO> searchTasks(String title, LocalDate startDateMin, LocalDate startDateMax) {
         List<Task> tasks;
-    
+
         if (title != null) {
             tasks = taskRepository.findByTitleContainingIgnoreCase(title);
         } else if (startDateMin != null && startDateMax != null) {
@@ -107,23 +126,22 @@ public class TaskService {
         } else {
             throw new IllegalArgumentException("Provide either title or a valid date range.");
         }
-    
+
         return tasks.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     private TaskDTO convertToDTO(Task task) {
         return new TaskDTO(
-            task.getId(),
-            task.getTitle(),
-            task.getDescription(),
-            task.getStatus(),
-            task.getStartDate(),
-            task.getCompletionDate(),
-            task.getDeadline(),
-            task.getAssignedPerson() != null ? task.getAssignedPerson().getId() : null,
-            task.getProject() != null ? task.getProject().getId() : null,
-            task.getProject() != null ? task.getProject().getTitle() : null
-        );
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getStartDate(),
+                task.getCompletionDate(),
+                task.getDeadline(),
+                task.getAssignedPerson() != null ? task.getAssignedPerson().getId() : null,
+                task.getProject() != null ? task.getProject().getId() : null,
+                task.getProject() != null ? task.getProject().getTitle() : null);
     }
 
     private Task convertToEntity(TaskDTO dto) {
@@ -142,7 +160,7 @@ public class TaskService {
         Project project = projectRepository.findById(dto.getProjectId())
                 .orElseThrow(() -> new NotFoundException("Project not found!"));
         task.setProject(project);
-        
+
         return task;
     }
 }
