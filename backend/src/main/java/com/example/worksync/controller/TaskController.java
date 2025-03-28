@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,11 +28,14 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
+    
+    private final TaskService taskService;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    private TaskService taskService;
-    @Autowired
-    private TaskRepository taskRepository;
+    public TaskController(TaskService taskService, TaskRepository taskRepository) {
+        this.taskService = taskService;
+        this.taskRepository = taskRepository;
+    }
 
     @GetMapping("/projects/{projectId}")
     public ResponseEntity<List<TaskDTO>> listTasksByProject(@PathVariable Long projectId) {

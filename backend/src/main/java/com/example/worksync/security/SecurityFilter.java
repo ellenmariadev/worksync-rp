@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import com.example.worksync.repository.UserRepository;
 import com.example.worksync.service.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,11 +18,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
-    @Autowired
-    private TokenService tokenService;
+    
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
 
-    @Autowired
-    private UserRepository userRepository;
+    public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+    }
 
     @SuppressWarnings("null")
     @Override
