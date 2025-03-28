@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.example.worksync.dto.requests.TaskDTO;
-import com.example.worksync.event.UserTaskAssignmentEvent;
+import com.example.worksync.event.UserTaskAssignmentEvent; 
 import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.model.Project;
 import com.example.worksync.model.Task;

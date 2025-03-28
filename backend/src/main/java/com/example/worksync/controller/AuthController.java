@@ -1,13 +1,11 @@
 package com.example.worksync.controller;
 
 import com.example.worksync.dto.requests.AuthDTO;
-import com.example.worksync.dto.requests.ProjectDTO;
 import com.example.worksync.dto.responses.LoginResponseDTO;
 import com.example.worksync.dto.requests.UserDTO;
 import com.example.worksync.model.User;
 import com.example.worksync.service.AuthService;
 import com.example.worksync.service.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,14 +21,17 @@ import java.util.List;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
+
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, TokenService tokenService) {
+        this.authService = authService;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthDTO authDTO) {

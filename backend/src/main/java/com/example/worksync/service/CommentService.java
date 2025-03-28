@@ -8,7 +8,6 @@ import com.example.worksync.model.User;
 import com.example.worksync.repository.CommentRepository;
 import com.example.worksync.repository.TaskRepository;
 import com.example.worksync.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.worksync.exceptions.ResourceNotFoundException;
  import com.example.worksync.exceptions.UnauthorizedAccessException;
@@ -21,14 +20,15 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private TaskRepository taskRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public CommentService(CommentRepository commentRepository, TaskRepository taskRepository, UserRepository userRepository) {
+        this.commentRepository = commentRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+    }
 
     public List<CommentDTO> listCommentsByTask(Long taskId) {
         List<Comment> comments = commentRepository.findByTaskId(taskId);

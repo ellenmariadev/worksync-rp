@@ -1,9 +1,7 @@
 package com.example.worksync.controller;
 
 import java.util.List;
-
 import com.example.worksync.exceptions.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,8 +23,11 @@ import jakarta.validation.Valid;
 
 public class ProjectController {
 
-    @Autowired
-    private ProjectService projectService;
+    private final ProjectService projectService;
+
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
