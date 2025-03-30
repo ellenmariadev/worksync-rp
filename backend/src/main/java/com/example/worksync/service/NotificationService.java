@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.model.Notification;
 import com.example.worksync.model.User;
-import com.example.worksync.repository.NotificationRepostiory;
+import com.example.worksync.repository.NotificationRepository;
 
 @Service
 public class NotificationService {
 
-    private final NotificationRepostiory notificationRepository;
+    private final NotificationRepository notificationRepository;
 
-    public NotificationService(NotificationRepostiory notificationRepository) {
+    public NotificationService(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
     }
 

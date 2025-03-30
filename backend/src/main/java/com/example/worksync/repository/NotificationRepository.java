@@ -9,7 +9,7 @@ import com.example.worksync.model.Notification;
 import com.example.worksync.model.User;
 
 @Repository
-public interface NotificationRepostiory extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findByUserAndReadFalse(User user);
 
     long countByUserAndReadFalse(User user);
