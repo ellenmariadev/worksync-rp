@@ -7,7 +7,7 @@
 <main>
   <h1 class="page-title">Crie sua tarefa</h1>
 
-  <div class="container" [formGroup]="taskForm"> 
+  <div class="container" [formGroup]="taskForm">
     <div class="task-form">
       <div class="form-left">
         <div class="title-task">
@@ -63,6 +63,16 @@
           </select>
         </div>
       </div>
+    </div>
+
+    <div class="info-field">
+      <span class="material-icons"> check_circle_outline </span>
+      <p class="info-name">Status</p>
+      <select formControlName="status" id="status">
+        <option value="NOT_STARTED">Não Iniciada</option>
+        <option value="IN_PROGRESS">Em Andamento</option>
+        <option value="DONE">Concluída</option>
+      </select>
     </div>
 
     <button (click)="editTask()" class="save-button">Salvar</button>

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,8 +63,9 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
-        TaskDTO updatedTask = taskService.updateTask(id, taskDTO);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO dto, @AuthenticationPrincipal Long userId) {
+        System.out.println("User ID: " + userId);
+        TaskDTO updatedTask = taskService.updateTask(id, dto);
         return ResponseEntity.ok(updatedTask);
     }
 
@@ -76,8 +78,6 @@ public class TaskController {
         taskRepository.deleteById(id);
         return ResponseEntity.noContent().build(); 
     }
-    
-    
 
     @GetMapping("/search")
     public ResponseEntity<?> searchTasks(
