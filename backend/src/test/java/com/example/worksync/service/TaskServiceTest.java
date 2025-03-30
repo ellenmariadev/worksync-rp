@@ -104,49 +104,43 @@ class TaskServiceTest {
     void testFindById_ShouldThrowNotFoundException_WhenTaskDoesNotExist() {
         when(taskRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> taskService.findById(1L).orElseThrow(() -> new NotFoundException("Task not found!")));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> taskService.findById(1L));
+        assertEquals("Task not found", exception.getMessage()); 
     }
             
     @Test
     void testCreateTask_ShouldThrowNotFoundException_WhenResponsiblePersonNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> taskService.createTask(taskDTO, user));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> taskService.createTask(taskDTO, user));
+        assertEquals("Expected exception message", exception.getMessage()); 
     }
 
     @Test
     void testUpdateTask_ShouldReturnUpdatedTaskDTO_WhenValidData() {
-        // Criar uma tarefa existente para atualizar
         Task existingTask = new Task();
         existingTask.setId(1L);
-        existingTask.setAssignedPerson(user);  // Definindo o responsável
-        existingTask.setProject(project);      // Definindo o projeto
-        existingTask.setTitle("Old Title");   // Título original
-        existingTask.setStatus(TaskStatus.NOT_STARTED);  // Status original
+        existingTask.setAssignedPerson(user);  
+        existingTask.setProject(project);      
+        existingTask.setTitle("Old Title");   
+        existingTask.setStatus(TaskStatus.NOT_STARTED);  
     
-        // Mock para encontrar a tarefa existente
         when(taskRepository.findById(1L)).thenReturn(Optional.of(existingTask));
-    
-        // Mock para salvar a tarefa (deve retornar a tarefa com os dados atualizados)
+
         when(taskRepository.save(any(Task.class))).thenReturn(existingTask);
     
-        // Mock para encontrar o responsável (usuário com ID 1L)
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
     
-        // Atualiza o DTO com novos dados
-        taskDTO.setTitle("Updated Title");  // Novo título
-        taskDTO.setStatus(TaskStatus.IN_PROGRESS);  // Novo status
-        taskDTO.setResponsibleId(user.getId());  // Garantindo que o responsibleId não seja nulo
+        taskDTO.setTitle("Updated Title"); 
+        taskDTO.setStatus(TaskStatus.IN_PROGRESS);  
+        taskDTO.setResponsibleId(user.getId());  
     
-        // Chama o método de atualização
         TaskDTO result = taskService.updateTask(1L, taskDTO);
-    
-        // Verificação dos resultados
+
         assertNotNull(result);
         assertEquals("Updated Title", result.getTitle());
         assertEquals(TaskStatus.IN_PROGRESS, result.getStatus());
     
-        // Verifica se o método save foi chamado corretamente
         verify(taskRepository, times(1)).save(existingTask);
     }
 
@@ -154,7 +148,8 @@ class TaskServiceTest {
     void testUpdateTask_ShouldThrowNotFoundException_WhenTaskNotFound() {
         when(taskRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> taskService.updateTask(1L, taskDTO));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> taskService.updateTask(1L, taskDTO));
+        assertEquals("Task not found", exception.getMessage()); 
     }
 
     @Test
@@ -170,7 +165,8 @@ class TaskServiceTest {
     void testDeleteTask_ShouldThrowNotFoundException_WhenTaskDoesNotExist() {
         when(taskRepository.existsById(1L)).thenReturn(false);
 
-        assertThrows(NotFoundException.class, () -> taskService.deleteTask(1L));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> taskService.deleteTask(1L));
+        assertEquals("Task not found", exception.getMessage()); 
     }
 
     @Test
@@ -197,27 +193,16 @@ class TaskServiceTest {
 
     @Test
     void testSearchTasks_ShouldThrowIllegalArgumentException_WhenNoCriteriaProvided() {
-        assertThrows(IllegalArgumentException.class, () -> taskService.searchTasks(null, null, null, null, null));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> taskService.searchTasks(null, null, null, null, null));
+        assertEquals("No search criteria provided", exception.getMessage()); 
     }
 
     @Test
     void testCreateTask_ShouldPublishEvent_WhenTaskCreated() {
-        // Criação de uma TaskDTO com projectId válido
-        taskDTO.setProjectId(project.getId());  // Certifique-se de que o projectId não seja null
-        
-        // Mock para salvar a tarefa
+        taskDTO.setProjectId(project.getId());  
         when(taskRepository.save(any(Task.class))).thenReturn(task);
-    
-        // Mock para encontrar o usuário com ID válido
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-    
-        // Mock para encontrar o projeto com ID válido
         when(projectRepository.findById(project.getId())).thenReturn(Optional.of(project));
-    
-        // Chamada para o método que está sendo testado
-        TaskDTO result = taskService.createTask(taskDTO, user);
-    
-        // Verifique se o evento foi publicado uma vez
         verify(eventPublisher, times(1)).publishEvent(any(UserTaskAssignmentEvent.class));
     }    
 }

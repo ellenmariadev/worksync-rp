@@ -2,6 +2,7 @@ package com.example.worksync.model;
 
 import java.util.List;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,10 @@ public class Project {
 
     private String title;
     private String description;
-    private List<Long> participantIds; 
+    @ElementCollection
+    private List<Long> participantIds;
+
+    @ElementCollection
     private List<Long> taskIds;
 
     public Project() {}
@@ -40,7 +44,6 @@ public class Project {
     public void setDescription(String description) { this.description = description; }
 
     public List<Long> getParticipantIds() { 
-        System.out.println(this.participantIds);
         return participantIds; 
     }
 
