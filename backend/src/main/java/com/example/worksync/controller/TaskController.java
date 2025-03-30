@@ -28,6 +28,8 @@ import com.example.worksync.model.User;
 import com.example.worksync.repository.TaskRepository;
 import com.example.worksync.service.TaskService;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/tasks")
@@ -58,16 +60,17 @@ public class TaskController {
 
 
     @PostMapping
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO, @AuthenticationPrincipal User user, BindingResult bindingResult) {
+    public ResponseEntity<TaskDTO> createTask(@RequestBody @Valid TaskDTO taskDTO, 
+                                            @AuthenticationPrincipal User user, 
+                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        if (taskDTO.getTitle() == null || taskDTO.getTitle().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        
         TaskDTO newTask = taskService.createTask(taskDTO, user);
         return ResponseEntity.ok(newTask);
     }
+
 
 
     @PatchMapping("/{id}")
@@ -87,11 +90,8 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
    
-   
-
-
     @GetMapping("/search")
-    public ResponseEntity<?> searchTasks(
+    public ResponseEntity<List<TaskDTO>> searchTasks(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) LocalDate startDateMin,
             @RequestParam(required = false) Long creatorId,
@@ -110,8 +110,7 @@ public class TaskController {
             return ResponseEntity.ok(tasks);
    
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while fetching tasks: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
