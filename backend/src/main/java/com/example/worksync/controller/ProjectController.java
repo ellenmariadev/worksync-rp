@@ -1,10 +1,13 @@
 package com.example.worksync.controller;
 
 import java.util.List;
+
 import com.example.worksync.exceptions.NotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.worksync.dto.requests.ProjectDTO;
+import com.example.worksync.model.User;
 import com.example.worksync.service.ProjectService;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -71,5 +77,11 @@ public class ProjectController {
     public ResponseEntity<ProjectDTO> addParticipant(@PathVariable Long projectId, @PathVariable Long userId) {
         ProjectDTO updatedProject = projectService.addParticipantToProject(projectId, userId);
         return ResponseEntity.ok(updatedProject);
+    }
+
+    @GetMapping("/{id}/participants")
+    public ResponseEntity<List<User>> getParticipants(@PathVariable Long id, @AuthenticationPrincipal Long userId) {
+        List<User> participants = projectService.getParticipants(id, userId);
+        return ResponseEntity.ok(participants);
     }
 }

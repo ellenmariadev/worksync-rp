@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.worksync.dto.requests.ProjectDTO;
 import com.example.worksync.exceptions.NotFoundException;
+import com.example.worksync.exceptions.UnauthorizedAccessException;
 import com.example.worksync.model.Project;
 import com.example.worksync.model.User;
 import com.example.worksync.repository.ProjectRepository;
@@ -25,9 +26,13 @@ public class ProjectService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getParticipants(Long projectId) {
+    public List<User> getParticipants(Long projectId, Long userId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project not found"));
+
+        if (!project.getParticipantIds().contains(userId)) {
+            throw new UnauthorizedAccessException("User is not a participant of this project");
+        }
 
         return project.getParticipantIds().stream()
                 .map(userRepository::findById)
@@ -45,6 +50,7 @@ public class ProjectService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    
 
     public Optional<ProjectDTO> findById(Long id) {
         return projectRepository.findById(id).map(this::convertToDTO);

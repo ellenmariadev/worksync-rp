@@ -39,7 +39,11 @@ public class Project {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public List<Long> getParticipantIds() { return participantIds; }
+    public List<Long> getParticipantIds() { 
+        System.out.println(this.participantIds);
+        return participantIds; 
+    }
+
     public void setParticipantIds(List<Long> participantIds) { this.participantIds = participantIds; }
 
     public List<Long> getTaskIds() { return taskIds; }

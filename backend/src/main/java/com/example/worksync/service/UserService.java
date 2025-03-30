@@ -28,8 +28,8 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
-        UserDetails user = userRepository.findByEmail(email);
-        return (User) user;
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        return userOptional.orElse(null);
     }
 
     public User getUserById(Long userId) {
