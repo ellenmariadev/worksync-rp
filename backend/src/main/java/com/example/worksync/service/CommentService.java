@@ -1,33 +1,31 @@
 package com.example.worksync.service;
 
-import com.example.worksync.dto.requests.CommentDTO;
-import com.example.worksync.exceptions.NotFoundException;
-import com.example.worksync.model.Comment;
-import com.example.worksync.model.Task;
-import com.example.worksync.model.User;
-import com.example.worksync.repository.CommentRepository;
-import com.example.worksync.repository.TaskRepository;
-import com.example.worksync.repository.UserRepository;
-import org.springframework.stereotype.Service;
-import com.example.worksync.exceptions.ResourceNotFoundException;
- import com.example.worksync.exceptions.UnauthorizedAccessException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.example.worksync.dto.requests.CommentDTO;
+import com.example.worksync.exceptions.NotFoundException;
+import com.example.worksync.exceptions.ResourceNotFoundException;
+import com.example.worksync.exceptions.UnauthorizedAccessException;
+import com.example.worksync.model.Comment;
+ import com.example.worksync.model.Task;
+import com.example.worksync.model.User;
+import com.example.worksync.repository.CommentRepository;
+import com.example.worksync.repository.TaskRepository;
 
 @Service
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
 
-    public CommentService(CommentRepository commentRepository, TaskRepository taskRepository, UserRepository userRepository) {
+    public CommentService(CommentRepository commentRepository, TaskRepository taskRepository) {
         this.commentRepository = commentRepository;
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
     }
 
     public List<CommentDTO> listCommentsByTask(Long taskId) {
