@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.worksync.dto.requests.TaskDTO;
 import com.example.worksync.event.UserTaskAssignmentEvent; 
 import com.example.worksync.exceptions.NotFoundException;
+import com.example.worksync.exceptions.UnauthorizedAccessException;
 import com.example.worksync.model.Project;
 import com.example.worksync.model.Task;
 import com.example.worksync.model.User;
@@ -25,13 +26,15 @@ public class TaskService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final ProjectService projectService; 
 
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository,
-            UserRepository userRepository, ApplicationEventPublisher eventPublisher) {
+            UserRepository userRepository, ApplicationEventPublisher eventPublisher, ProjectService projectService) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.eventPublisher = eventPublisher;
+        this.projectService = projectService; 
     }
 
     public List<TaskDTO> listTasksByProject(Long projectId) {
@@ -55,10 +58,10 @@ public class TaskService {
     public TaskDTO updateTask(Long id, TaskDTO dto) {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found!"));
-
+    
         User previousAssignedPerson = existingTask.getAssignedPerson();
         boolean assignedPersonChanged = false;
-
+    
         if (dto.getResponsibleId() != null) {
             User responsiblePerson = userRepository.findById(dto.getResponsibleId())
                     .orElseThrow(() -> new NotFoundException("Responsible person not found!"));
@@ -67,46 +70,50 @@ public class TaskService {
                 assignedPersonChanged = true;
             }
         }
-
+    
         if (dto.getProjectId() != null) {
             Project project = projectRepository.findById(dto.getProjectId())
                     .orElseThrow(() -> new NotFoundException("Project not found!"));
             existingTask.setProject(project);
         }
-
+    
         if (dto.getTitle() != null) {
             existingTask.setTitle(dto.getTitle());
         }
-
+    
         if (dto.getDescription() != null) {
             existingTask.setDescription(dto.getDescription());
         }
-
+    
         if (dto.getStatus() != null) {
+            if (existingTask.getProject() == null ||
+                    !projectService.getParticipants(existingTask.getProject().getId()).contains(existingTask.getAssignedPerson())) { // Usando o ProjectService para obter os participantes
+                throw new UnauthorizedAccessException("Only project participants can update the task status!");
+            }
             existingTask.setStatus(dto.getStatus());
         }
-
+    
         if (dto.getStartDate() != null) {
             existingTask.setStartDate(dto.getStartDate());
         }
-
+    
         if (dto.getCompletionDate() != null) {
             existingTask.setCompletionDate(dto.getCompletionDate());
         }
-
+    
         if (dto.getDeadline() != null) {
             existingTask.setDeadline(dto.getDeadline());
         }
-
+    
         existingTask = taskRepository.save(existingTask);
-
+    
         if (assignedPersonChanged) {
-            eventPublisher
-                    .publishEvent(new UserTaskAssignmentEvent(this, existingTask.getAssignedPerson(), existingTask));
+            eventPublisher.publishEvent(new UserTaskAssignmentEvent(this, existingTask.getAssignedPerson(), existingTask));
         }
-
+    
         return convertToDTO(existingTask);
     }
+    
 
     public void deleteTask(Long id) {
         if (!taskRepository.existsById(id)) {
