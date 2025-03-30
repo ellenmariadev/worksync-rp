@@ -1,14 +1,12 @@
 package com.example.worksync.event;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.worksync.model.Task;
@@ -16,7 +14,7 @@ import com.example.worksync.model.User;
 import com.example.worksync.service.NotificationService;
 
 @ExtendWith(MockitoExtension.class)
-public class UserTaskAssignmentListenertTest {
+class UserTaskAssignmentListenertTest {
 
     @Mock
     private NotificationService notificationService;
@@ -45,10 +43,7 @@ public class UserTaskAssignmentListenertTest {
     void getEventToCreateCreateNotification() {
         listener.handleUserTaskAssignment(testEvent);
 
-        verify(notificationService, times(1)).createNotification(
-                eq(user),
-                eq("Você foi assinado à tarefa: Test Task"),
-                eq(1L)
-        );
+        verify(notificationService, times(1)).createNotification(user,
+        "Você foi assinado à tarefa: Test Task",1L);
     }
 }
