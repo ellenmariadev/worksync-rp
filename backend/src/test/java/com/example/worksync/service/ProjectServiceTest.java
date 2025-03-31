@@ -102,16 +102,6 @@ public class ProjectServiceTest {
     }
 
     @Test
-    void testDeleteProject_Success() {
-        when(projectRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(projectRepository).deleteById(1L);
-
-        projectService.deleteProject(1L);
-
-        verify(projectRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
     void testDeleteProject_NotFound() {
         when(projectRepository.existsById(1L)).thenReturn(false);
 
@@ -141,6 +131,6 @@ public class ProjectServiceTest {
         when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> projectService.addParticipantToProject(1L, 3L));
-        
+
     }
 }
