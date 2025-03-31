@@ -99,9 +99,10 @@ void testDeleteComment() {
         commentService.deleteComment(comment.getId(), user);
         fail("Expected ResourceNotFoundException to be thrown");
     } catch (ResourceNotFoundException e) {
-        // Test passed, exception is expected.
+        // Test passed, exception is expected
     }
 }
+
 
 @Test
 void testConvertToDTO() {
