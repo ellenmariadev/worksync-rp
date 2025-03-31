@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
-public class TaskControllerIntegrationTest {
+class TaskControllerIntegrationTest {
 
     private MockMvc mockMvc;
 
@@ -46,41 +46,33 @@ public class TaskControllerIntegrationTest {
     @Mock
     private TaskRepository taskRepository;
 
-    // InjectMocks cria o controlador e injeta os mocks do serviço e repositório
     @InjectMocks
     private TaskController taskController;
 
     private User testUser;
 
     @BeforeEach
-    public void setup() {
-        // Configurando o MockMvc para testar o controlador
+    void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(taskController).build();
 
-        // Usuário simulado para autenticação
         testUser = new User();
         testUser.setId(1L);
         testUser.setName("Test User");
         testUser.setEmail("test@example.com");
-
-        // Simulando o usuário autenticado no contexto de segurança
         Authentication authentication = org.springframework.security.authentication.UsernamePasswordAuthenticationToken.authenticated(testUser, null, testUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Test
-    public void testCreateTask() throws Exception {
-        // Criando o DTO da tarefa que será enviado
+    void testCreateTask() throws Exception {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setTitle("Test Task");
         taskDTO.setDescription("Description of test task");
         taskDTO.setProjectId(1L);
         taskDTO.setResponsibleId(1L);
 
-        // Simulando o comportamento do serviço de criação de tarefa
         when(taskService.createTask(any(TaskDTO.class), any(User.class))).thenReturn(taskDTO);
 
-        // Fazendo a requisição POST para o endpoint /tasks
         mockMvc.perform(post("/tasks")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"Test Task\", \"description\":\"Description of test task\", \"projectId\":1, \"responsibleId\":1}")
@@ -91,17 +83,14 @@ public class TaskControllerIntegrationTest {
     }
 
     @Test
-    public void testGetTaskById() throws Exception {
-        // Criando o DTO da tarefa
+    void testGetTaskById() throws Exception {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setId(1L);
         taskDTO.setTitle("Test Task");
         taskDTO.setDescription("Description of test task");
 
-        // Simulando o comportamento do serviço de encontrar tarefa
         when(taskService.findById(1L)).thenReturn(Optional.of(taskDTO));
 
-        // Fazendo a requisição GET para o endpoint /tasks/{id}
         mockMvc.perform(get("/tasks/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -109,18 +98,14 @@ public class TaskControllerIntegrationTest {
                 .andExpect(jsonPath("$.description").value("Description of test task"));
     }
     @Test
-    public void testUpdateTask() throws Exception {
-        // Criando o DTO da tarefa que será atualizado
+    void testUpdateTask() throws Exception {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setId(1L);
         taskDTO.setTitle("Updated Test Task");
         taskDTO.setDescription("Updated Description of test task");
     
-        // Simulando o comportamento do serviço de atualização de tarefa
-        // Alteração: usando any(TaskDTO.class) ao invés de passar a instância exata do taskDTO
         when(taskService.updateTask(any(Long.class), any(TaskDTO.class))).thenReturn(taskDTO);
     
-        // Fazendo a requisição PATCH para o endpoint /tasks/{id}
         mockMvc.perform(patch("/tasks/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"Updated Test Task\", \"description\":\"Updated Description of test task\"}")
@@ -132,15 +117,12 @@ public class TaskControllerIntegrationTest {
     }
     
     @Test
-    public void testDeleteTask() throws Exception {
-        // Simulando que a tarefa existe no repositório
+    void testDeleteTask() throws Exception {
         when(taskRepository.existsById(1L)).thenReturn(true);
 
-        // Fazendo a requisição DELETE para o endpoint /tasks/{id}
         mockMvc.perform(delete("/tasks/1"))
                 .andExpect(status().isNoContent());
 
-        // Verificando se o método delete foi chamado uma vez
         verify(taskRepository, times(1)).deleteById(1L);
     }
 }
