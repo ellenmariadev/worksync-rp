@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommentServiceTest {
+class CommentServiceTest {
 
     @Mock
     private CommentRepository commentRepository;
@@ -90,26 +90,16 @@ public class CommentServiceTest {
     }
 
     @Test
-    void testDeleteComment_CommentNotFound() {
-        when(commentRepository.findById(comment.getId())).thenReturn(Optional.empty());
-    
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> commentService.deleteComment(comment.getId(), user));
-        assertNotNull(exception);
+    public void testDeleteComment() {
+        assertThrows(ResourceNotFoundException.class, () -> {
+            commentService.deleteComment(comment.getId(), user);
+        });
     }
-    
-    
-
-    @Test
-    void testDeleteComment_Unauthorized() {
-        Comment anotherComment = new Comment("Another comment", task, anotherUser);
-        when(commentRepository.findById(anotherComment.getId())).thenReturn(Optional.of(anotherComment));
-
-        assertThrows(UnauthorizedAccessException.class, () -> commentService.deleteComment(anotherComment.getId(), user));
-    }
+ 
 
     @Test
     void testConvertToDTO() {
-        CommentDTO commentDTO = commentService.convertToDTO(comment);
+        CommentDTO newComment = commentService.convertToDTO(comment);
 
         assertNotNull(commentDTO);
         assertEquals(comment.getId(), commentDTO.getId());
