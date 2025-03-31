@@ -90,12 +90,18 @@ class CommentServiceTest {
         verify(commentRepository, times(1)).delete(comment);
     }
 
- @Test
+ 
+@Test
 void testDeleteComment() {
     when(commentRepository.findById(comment.getId())).thenReturn(Optional.empty());
-    assertThrows(ResourceNotFoundException.class, () -> commentService.deleteComment(comment.getId(), user));
+
+    try {
+        commentService.deleteComment(comment.getId(), user);
+        fail("Expected ResourceNotFoundException to be thrown");
+    } catch (ResourceNotFoundException e) {
+        // Test passed, exception is expected.
+    }
 }
- 
 
 @Test
 void testConvertToDTO() {
