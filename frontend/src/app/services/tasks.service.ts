@@ -90,6 +90,51 @@ export class TaskService {
     });
   }
 
+  getSearchTasks(
+    creatorId: string,
+    assignedPersonId: string,
+    statusFilter: string,
+    startDate: string,
+    endDate: string,
+    searchQuery: string,
+  ): Observable<any[]> {
+    let url = `${this.apiUrl}/search`;
+    const params: any = {};
+
+    if (creatorId) {
+      params.creatorId = creatorId;
+    }
+
+    if (assignedPersonId) {
+      params.assignedPersonId = assignedPersonId;
+    }
+
+    if (statusFilter) {
+      params.statusFilter = statusFilter;
+    }
+    
+    if (startDate) {
+      params.startDate = startDate;
+    }
+    
+    if (endDate) {
+      params.endDate = endDate;
+    }
+
+    if (searchQuery) {
+      params.searchQuery = searchQuery;
+    }
+
+    const queryParams = new URLSearchParams(params).toString();
+
+    if (queryParams) {
+      url = `${url}?${queryParams}`;
+    }
+
+    return this.http.get<any[]>(url, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 
   getTaskById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`, {

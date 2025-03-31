@@ -3,6 +3,9 @@ import { TaskService } from '../../services/tasks.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { AuthService } from '../../services/auth/auth.service';
+import { UserService } from '../../services/user.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -17,20 +20,72 @@ export class TasksComponent implements OnInit {
   searchQuery: string = '';
   startDate: string = '';
   endDate: string = '';
-  statusFilter: string = ''; // Novo filtro para status
+  creatorId: string = '';
+  assignedPersonId: string = '';
+  statusFilter: string = '';
+  username: string = '';
+  currentUserId!: number;
   private router = inject(Router);
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
 
   constructor(private taskService: TaskService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.loadTasks();
+    const userLog = this.authService.getUser();
+    if (userLog && userLog.sub) {
+      this.username = userLog.sub;
+    }
+
+    this.userService.getUserByEmail(this.username).subscribe({
+      next: (user) => {
+        this.currentUserId = user.id;
+        this.loadTasks(); 
+      },
+      error: (err) => {
+        console.error('Erro ao buscar o usuário:', err);
+      },
+    });
   }
 
   loadTasks(): void {
-    this.taskService.getTasksByProject(1, this.statusFilter, this.startDate, this.endDate).subscribe({
-      next: (data) => {
-        console.log('Tarefas carregadas:', data);
-        this.tasks = data;
+    const creatorTasks$ = this.taskService.getSearchTasks(
+      this.currentUserId.toString(),
+      '',
+      this.statusFilter,
+      this.startDate,
+      this.endDate,
+      this.searchQuery
+    );
+
+    const assignedTasks$ = this.taskService.getSearchTasks(
+      '',
+      this.currentUserId.toString(),
+      this.statusFilter,
+      this.startDate,
+      this.endDate,
+      this.searchQuery
+    );
+
+    forkJoin([creatorTasks$, assignedTasks$]).subscribe({
+      next: ([creatorTasks, assignedTasks]) => {
+        if (!Array.isArray(creatorTasks)) {
+          creatorTasks = []; 
+        }
+
+        if (!Array.isArray(assignedTasks)) {
+          assignedTasks = []; 
+        }
+
+        const allTasksMap = new Map();
+
+        [...creatorTasks, ...assignedTasks].forEach(task => {
+          if (!allTasksMap.has(task.id)) {
+            allTasksMap.set(task.id, task);
+          }
+        });
+
+        this.tasks = Array.from(allTasksMap.values());
         this.applyFilters();
         this.cdr.detectChanges();
       },
@@ -51,7 +106,7 @@ export class TasksComponent implements OnInit {
 
   onEndDateChange(event: Event): void {
     this.endDate = (event.target as HTMLInputElement).value;
-    this.applyFilters();
+    this.applyFilters();  
   }
 
   // Novo método para filtrar pelo status
