@@ -6,11 +6,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.worksync.dto.requests.TaskDTO;
-import com.example.worksync.event.UserTaskAssignmentEvent; 
+import com.example.worksync.event.UserTaskAssignmentEvent;
 import com.example.worksync.exceptions.NotFoundException;
+import com.example.worksync.exceptions.UnauthorizedAccessException;
 import com.example.worksync.model.Project;
 import com.example.worksync.model.Task;
 import com.example.worksync.model.User;
@@ -25,18 +29,19 @@ public class TaskService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final ProjectService projectService;
 
     public TaskService(TaskRepository taskRepository, ProjectRepository projectRepository,
-            UserRepository userRepository, ApplicationEventPublisher eventPublisher) {
+            UserRepository userRepository, ApplicationEventPublisher eventPublisher, ProjectService projectService) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.eventPublisher = eventPublisher;
+        this.projectService = projectService;
     }
 
     public List<TaskDTO> listTasksByProject(Long projectId) {
-        List<Task> tasks = taskRepository.findByProjectId(projectId);
-        return tasks.stream()
+        return taskRepository.findByProjectId(projectId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -55,59 +60,40 @@ public class TaskService {
     public TaskDTO updateTask(Long id, TaskDTO dto) {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found!"));
-
-        User previousAssignedPerson = existingTask.getAssignedPerson();
+        
+        Project project = existingTask.getProject();
+        User authenticatedUser = getAuthenticatedUser();
+        Long userId = authenticatedUser.getId();
+        boolean isAdmin = "ROLE_ADMIN".equals(authenticatedUser.getRole().name());
+        
+        if (project == null || (!isAdmin && !project.getParticipantIds().contains(userId))) {
+            throw new UnauthorizedAccessException("User is not authorized to update the task status");
+        }
+    
         boolean assignedPersonChanged = false;
-
+        
         if (dto.getResponsibleId() != null) {
             User responsiblePerson = userRepository.findById(dto.getResponsibleId())
                     .orElseThrow(() -> new NotFoundException("Responsible person not found!"));
-            if (!responsiblePerson.equals(previousAssignedPerson)) {
+            if (!responsiblePerson.equals(existingTask.getAssignedPerson())) {
                 existingTask.setAssignedPerson(responsiblePerson);
                 assignedPersonChanged = true;
             }
         }
-
-        if (dto.getProjectId() != null) {
-            Project project = projectRepository.findById(dto.getProjectId())
-                    .orElseThrow(() -> new NotFoundException("Project not found!"));
-            existingTask.setProject(project);
-        }
-
-        if (dto.getTitle() != null) {
-            existingTask.setTitle(dto.getTitle());
-        }
-
-        if (dto.getDescription() != null) {
-            existingTask.setDescription(dto.getDescription());
-        }
-
+        
         if (dto.getStatus() != null) {
             existingTask.setStatus(dto.getStatus());
         }
-
-        if (dto.getStartDate() != null) {
-            existingTask.setStartDate(dto.getStartDate());
-        }
-
-        if (dto.getCompletionDate() != null) {
-            existingTask.setCompletionDate(dto.getCompletionDate());
-        }
-
-        if (dto.getDeadline() != null) {
-            existingTask.setDeadline(dto.getDeadline());
-        }
-
+        
         existingTask = taskRepository.save(existingTask);
-
+        
         if (assignedPersonChanged) {
-            eventPublisher
-                    .publishEvent(new UserTaskAssignmentEvent(this, existingTask.getAssignedPerson(), existingTask));
+            eventPublisher.publishEvent(new UserTaskAssignmentEvent(this, existingTask.getAssignedPerson(), existingTask));
         }
-
+        
         return convertToDTO(existingTask);
     }
-
+    
     public void deleteTask(Long id) {
         if (!taskRepository.existsById(id)) {
             throw new NotFoundException("Task not found!");
@@ -116,18 +102,34 @@ public class TaskService {
     }
 
     public List<TaskDTO> searchTasks(String title, LocalDate startDateMin, LocalDate startDateMax) {
-        List<Task> tasks;
-
         if (title != null) {
-            tasks = taskRepository.findByTitleContainingIgnoreCase(title);
+            return taskRepository.findByTitleContainingIgnoreCase(title).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
         } else if (startDateMin != null && startDateMax != null) {
-            tasks = taskRepository.findByStartDateBetween(startDateMin, startDateMax);
+            return taskRepository.findByStartDateBetween(startDateMin, startDateMax).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
         } else {
             throw new IllegalArgumentException("Provide either title or a valid date range.");
         }
-
-        return tasks.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+
+    private User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || "anonymousUser".equals(authentication.getPrincipal())) {
+            throw new UnauthorizedAccessException("No authenticated user found");
+        }
+    
+        // Pegando o principal como UserDetails
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal(); // Aqui acessamos o usuário autenticado
+    
+        // Agora, busque o usuário pelo email (nome de usuário) no repositório
+        return userRepository.findByEmail(userDetails.getUsername()) // Agora procuramos o email do usuário
+                .orElseThrow(() -> new NotFoundException("Authenticated user not found"));
+    }
+        
 
     private TaskDTO convertToDTO(Task task) {
         return new TaskDTO(
@@ -151,15 +153,10 @@ public class TaskService {
         task.setStartDate(dto.getStartDate());
         task.setCompletionDate(dto.getCompletionDate());
         task.setDeadline(dto.getDeadline());
-
-        User responsiblePerson = userRepository.findById(dto.getResponsibleId())
-                .orElseThrow(() -> new NotFoundException("Responsible person not found!"));
-        task.setAssignedPerson(responsiblePerson);
-
-        Project project = projectRepository.findById(dto.getProjectId())
-                .orElseThrow(() -> new NotFoundException("Project not found!"));
-        task.setProject(project);
-
+        task.setAssignedPerson(userRepository.findById(dto.getResponsibleId())
+                .orElseThrow(() -> new NotFoundException("Responsible person not found!")));
+        task.setProject(projectRepository.findById(dto.getProjectId())
+                .orElseThrow(() -> new NotFoundException("Project not found!")));
         return task;
     }
 }

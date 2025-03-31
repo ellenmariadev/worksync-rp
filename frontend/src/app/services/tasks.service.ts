@@ -60,20 +60,36 @@ export class TaskService {
     }
   }
 
-  getTasksByProject(projectId: number): Observable<any[]> {
-    try {
-      return this.http.get<any[]>(`${this.apiUrl}/projects/${projectId}`, {
-        headers: this.getAuthHeaders(),
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      } else {
-        console.error('Unknown error occurred');
-      }
-      return new Observable();
+  getTasksByProject(
+    projectId: number,
+    status?: string,
+    startDate?: string,
+    endDate?: string
+  ): Observable<any[]> {
+    let url = `${this.apiUrl}/projects/${projectId}`;
+    const params: any = {};
+
+    if (status) {
+      params.status = status;
     }
+    if (startDate) {
+      params.startDate = startDate;
+    }
+    if (endDate) {
+      params.endDate = endDate;
+    }
+
+    const queryParams = new URLSearchParams(params).toString();
+
+    if (queryParams) {
+      url = `${url}?${queryParams}`;
+    }
+
+    return this.http.get<any[]>(url, {
+      headers: this.getAuthHeaders(),
+    });
   }
+
 
   getTaskById(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`, {

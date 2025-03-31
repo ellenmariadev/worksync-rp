@@ -15,9 +15,19 @@
             <input type="date" (change)="onStartDateChange($event)" placeholder="Data início">
             <input type="date" (change)="onEndDateChange($event)" placeholder="Data fim">
 
+            <!-- Filtro de status -->
+            <select (change)="onStatusChange($event)">
+                <option value="">Todos os Status</option>
+                <option value="NOT_STARTED">Não Iniciada</option>
+                <option value="IN_PROGRESS">Em Andamento</option>
+                <option value="DONE">Concluída</option>
+            </select>
+
+            <!-- Botão para criar nova tarefa -->
             <button (click)="goToCreateTask()" class="btn-criar-tarefa">+ Tarefa</button>
         </div>
 
+        <!-- Tabela de tarefas -->
         <div class="tabela-tarefas">
             <div class="tabela-header">
                 <span class="col">Tarefa</span>
@@ -28,16 +38,16 @@
             </div>
 
             <div class="tabela-linha" *ngFor="let task of filteredTasks">
-              <span class="col task-title" (click)="goToViewTask(task.id)">{{ task.title }}</span>
+                <span class="col task-title" (click)="goToViewTask(task.id)">{{ task.title }}</span>
                 <span class="col">{{ task.projectName }}</span>
                 <span class="col">{{ task.startDate }}</span>
                 <span class="col">
                     <span class="status" [ngClass]="{
-                        'status-pendente': task.status === 'Pendente',
-                        'status-andamento': task.status === 'Em Andamento',
-                        'status-concluido': task.status === 'Concluído'
+                        'status-pendente': task.status === 'NOT_STARTED',
+                        'status-andamento': task.status === 'IN_PROGRESS',
+                        'status-concluido': task.status === 'DONE'
                     }">
-                        {{ task.status }}
+                        {{ translateStatus(task.status) }}
                     </span>
                 </span>
                 <span class="col acoes">
