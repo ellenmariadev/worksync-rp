@@ -1,22 +1,24 @@
 package com.example.worksync.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.util.List;
-
 @Entity
 @Table(name = "projects")
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private String description;
-    private List<Long> participantIds;
+    private List<Long> participantIds; 
     private List<Long> taskIds;
 
     public Project() {}
@@ -37,7 +39,11 @@ public class Project {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public List<Long> getParticipantIds() { return participantIds; }
+    public List<Long> getParticipantIds() { 
+        System.out.println(this.participantIds);
+        return participantIds; 
+    }
+
     public void setParticipantIds(List<Long> participantIds) { this.participantIds = participantIds; }
 
     public List<Long> getTaskIds() { return taskIds; }
