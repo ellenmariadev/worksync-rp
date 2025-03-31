@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import com.example.worksync.dto.requests.TaskDTO;
 import com.example.worksync.model.enums.TaskStatus;
 
 
@@ -23,58 +23,51 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
+
 @Entity
 @Table(name = "tasks")
 public class Task implements Serializable {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String title;
     private String description;
 
-
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
-
 
     private LocalDate startDate;
     private LocalDate completionDate;
     private LocalDate deadline;
 
-
     @ManyToOne
     @JoinColumn(name = "assigned_person_id", nullable = false)
     private User assignedPerson;
-
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
-
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
-   
+
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-
     public Task() {}
 
-
-    public Task(String title, String description, TaskStatus status, LocalDate startDate, LocalDate completionDate, LocalDate deadline, User assignedPerson, User creator, Project project) {
+    // Construtor que aceita um TaskDTO
+    public Task(TaskDTO taskDTO, User assignedPerson, User creator, Project project) {
         this.comments = new ArrayList<>();
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.startDate = startDate;
-        this.completionDate = completionDate;
-        this.deadline = deadline;
+        this.title = taskDTO.getTitle();
+        this.description = taskDTO.getDescription();
+        this.status = taskDTO.getStatus();
+        this.startDate = taskDTO.getStartDate();
+        this.completionDate = taskDTO.getCompletionDate();
+        this.deadline = taskDTO.getDeadline();
         this.assignedPerson = assignedPerson;
         this.creator = creator;
         this.project = project;
@@ -119,7 +112,6 @@ public class Task implements Serializable {
 
     public Project getProject() { return project; }
     public void setProject(Project project) { this.project = project; }
-
 
     public List<Comment> getComments() { return comments; }
     public void setComments(List<Comment> comments) { this.comments = comments; }
