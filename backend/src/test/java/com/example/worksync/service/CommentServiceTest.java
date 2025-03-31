@@ -97,17 +97,22 @@ class CommentServiceTest {
     }
  
 
-    @Test
-    void testConvertToDTO() {
-        CommentDTO newComment = commentService.convertToDTO(comment);
+@Test
+void testConvertToDTO() {
+    LocalDateTime expectedCreatedAt = comment.getCreatedAt().truncatedTo(ChronoUnit.MILLIS);
+    LocalDateTime actualCreatedAt = commentDTO.getCreatedAt().truncatedTo(ChronoUnit.MILLIS);
 
-        assertNotNull(commentDTO);
-        assertEquals(comment.getId(), commentDTO.getId());
-        assertEquals(comment.getDescription(), commentDTO.getDescription());
-        assertEquals(comment.getTask().getId(), commentDTO.getTaskId());
-        assertEquals(comment.getUser().getId(), commentDTO.getUserId());
-        assertEquals(comment.getCreatedAt(), commentDTO.getCreatedAt());
-    }
+    CommentDTO newComment = commentService.convertToDTO(comment);
+
+    assertNotNull(newComment);
+    assertEquals(comment.getId(), newComment.getId());
+    assertEquals(comment.getDescription(), newComment.getDescription());
+    assertEquals(comment.getTask().getId(), newComment.getTaskId());
+    assertEquals(comment.getUser().getId(), newComment.getUserId());
+    
+    assertEquals(expectedCreatedAt, actualCreatedAt);
+}
+
 
     @Test
     void testListCommentsByTask_Success() {
