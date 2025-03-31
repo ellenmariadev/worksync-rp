@@ -32,7 +32,7 @@ import com.example.worksync.model.User;
 import com.example.worksync.service.NotificationService;
 
 @ExtendWith(MockitoExtension.class)
-public class NotificationIntegrationTest {
+class NotificationIntegrationTest {
     
     @Mock
     private NotificationService notificationService;
@@ -50,7 +50,7 @@ public class NotificationIntegrationTest {
     private Notification testNotification;
     
     @BeforeEach
-    public void setup() {
+    void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(notificationController).build();
         
         testUser = new User();
@@ -71,7 +71,7 @@ public class NotificationIntegrationTest {
     }
     
     @Test
-    public void testHandleUserTaskAssignment() {
+    void testHandleUserTaskAssignment() {
         UserTaskAssignmentEvent event = new UserTaskAssignmentEvent(this, testUser, testTask);
         
         userTaskAssignmentListener.handleUserTaskAssignment(event);
@@ -81,7 +81,7 @@ public class NotificationIntegrationTest {
     
     @Test
     @WithMockUser(username = "testuser")
-    public void testGetUnreadNotifications() throws Exception {
+    void testGetUnreadNotifications() throws Exception {
         List<Notification> notifications = Arrays.asList(testNotification);
         
         when(notificationService.getUnreadNotificationsForUser(any(User.class))).thenReturn(notifications);
@@ -95,7 +95,7 @@ public class NotificationIntegrationTest {
     
     
     @Test
-    public void testMarkNotificationAsRead() throws Exception {
+    void testMarkNotificationAsRead() throws Exception {
         when(notificationService.markAsRead(anyLong())).thenReturn(testNotification);
         
         mockMvc.perform(post("/notifications/1/read")
