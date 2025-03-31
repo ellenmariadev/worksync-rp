@@ -1,8 +1,10 @@
 package com.example.worksync.dto.requests;
 
-import java.time.LocalDate;
-
 import com.example.worksync.model.enums.TaskStatus;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.LocalDate;
 
 public class TaskDTO {
 
@@ -15,14 +17,25 @@ public class TaskDTO {
     private LocalDate deadline;
     private Long responsibleId;
     private Long projectId;
-    private String projectName; 
+    private String projectName;
 
-    public TaskDTO() {
-    }
+    // Construtor padrão
+    public TaskDTO() {}
 
-    public TaskDTO(Long id, String title, String description, TaskStatus status, 
-                   LocalDate startDate, LocalDate completionDate, LocalDate deadline, 
-                   Long responsibleId, Long projectId, String projectName) {
+    // Construtor com todos os parâmetros
+    @JsonCreator
+    public TaskDTO(
+        @JsonProperty("id") Long id,
+        @JsonProperty("title") String title,
+        @JsonProperty("description") String description,
+        @JsonProperty("status") TaskStatus status,
+        @JsonProperty("startDate") LocalDate startDate,
+        @JsonProperty("completionDate") LocalDate completionDate,
+        @JsonProperty("deadline") LocalDate deadline,
+        @JsonProperty("responsibleId") Long responsibleId,
+        @JsonProperty("projectId") Long projectId,
+        @JsonProperty("projectName") String projectName
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,15 +45,10 @@ public class TaskDTO {
         this.deadline = deadline;
         this.responsibleId = responsibleId;
         this.projectId = projectId;
-        this.projectName = projectName; 
+        this.projectName = projectName;
     }
 
-    public TaskDTO(Long id, String title, String description, TaskStatus status, 
-                   LocalDate startDate, LocalDate completionDate, LocalDate deadline, 
-                   Long responsibleId, Long projectId) {
-        this(id, title, description, status, startDate, completionDate, deadline, responsibleId, projectId, null);
-    }
-
+    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

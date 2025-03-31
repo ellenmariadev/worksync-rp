@@ -17,6 +17,7 @@ export class TasksComponent implements OnInit {
   searchQuery: string = '';
   startDate: string = '';
   endDate: string = '';
+  statusFilter: string = ''; // Novo filtro para status
   private router = inject(Router);
 
   constructor(private taskService: TaskService, private cdr: ChangeDetectorRef) {}
@@ -26,7 +27,7 @@ export class TasksComponent implements OnInit {
   }
 
   loadTasks(): void {
-    this.taskService.getTasksByProject(1).subscribe({
+    this.taskService.getTasksByProject(1, this.statusFilter, this.startDate, this.endDate).subscribe({
       next: (data) => {
         console.log('Tarefas carregadas:', data);
         this.tasks = data;
@@ -36,6 +37,7 @@ export class TasksComponent implements OnInit {
       error: (err) => console.error('Erro ao buscar tarefas', err),
     });
   }
+
 
   onSearchChange(event: Event): void {
     this.searchQuery = (event.target as HTMLInputElement).value.toLowerCase();
@@ -52,12 +54,19 @@ export class TasksComponent implements OnInit {
     this.applyFilters();
   }
 
+  // Novo método para filtrar pelo status
+  onStatusChange(event: Event): void {
+    this.statusFilter = (event.target as HTMLSelectElement).value;
+    this.applyFilters();
+  }
+
   applyFilters(): void {
     this.filteredTasks = this.tasks.filter(task => {
       const titleMatch = task.title.toLowerCase().includes(this.searchQuery);
       const startDateMatch = this.startDate ? new Date(task.startDate) >= new Date(this.startDate) : true;
       const endDateMatch = this.endDate ? new Date(task.startDate) <= new Date(this.endDate) : true;
-      return titleMatch && startDateMatch && endDateMatch;
+      const statusMatch = this.statusFilter ? task.status === this.statusFilter : true; // Filtro de status
+      return titleMatch && startDateMatch && endDateMatch && statusMatch;
     });
   }
 
@@ -87,5 +96,18 @@ export class TasksComponent implements OnInit {
   goToViewTask(taskId: number): void {
     this.router.navigate([`/tasks/${taskId}`]);
   }
-}
 
+  // Método para traduzir o status
+  translateStatus(status: string): string {
+    switch (status) {
+      case 'NOT_STARTED':
+        return 'Não Iniciada';
+      case 'IN_PROGRESS':
+        return 'Em Andamento';
+      case 'DONE':
+        return 'Concluída';
+      default:
+        return 'Desconhecido';
+    }
+  }
+}

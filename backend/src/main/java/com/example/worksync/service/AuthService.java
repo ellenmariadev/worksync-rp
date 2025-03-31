@@ -23,15 +23,15 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByEmail(username);
+        return this.userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
     }
 
     public User register(UserDTO userDTO) {
-        UserDetails userDetails = this.userRepository.findByEmail(userDTO.getEmail());
-
-        if (userDetails != null) {
+        if (this.userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new ConflictException("Email already taken");
         }
+
         String encriptedPassword = new BCryptPasswordEncoder().encode(userDTO.getPassword());
 
         User user = new User(userDTO.getEmail(), encriptedPassword, userDTO.getRole(), userDTO.getName());
