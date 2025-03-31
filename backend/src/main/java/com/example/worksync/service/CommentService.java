@@ -52,7 +52,7 @@ public class CommentService {
         return convertToDTO(comment);
     }
 
-    private CommentDTO convertToDTO(Comment comment) {
+    public CommentDTO convertToDTO(Comment comment) {
         return new CommentDTO(
                 comment.getId(),
                 comment.getDescription(),
@@ -62,20 +62,19 @@ public class CommentService {
         );
     }
 
-    public void deleteComment(Long commentId, User user) {
+    public void deleteComment(Long commentId, User user) throws ResourceNotFoundException {
         Optional<Comment> commentOpt = commentRepository.findById(commentId);
-        
+    
         if (commentOpt.isEmpty()) {
-            throw new ResourceNotFoundException("Comment", commentId);
+            throw new ResourceNotFoundException("Comment not found", commentId);
         }
-
+    
         Comment comment = commentOpt.get();
-        
-        
+    
         if (!comment.getUser().getId().equals(user.getId())) {
             throw new UnauthorizedAccessException("You are not authorized to delete this comment.");
         }
-
+    
         commentRepository.delete(comment);
-    }
+    }    
 }
