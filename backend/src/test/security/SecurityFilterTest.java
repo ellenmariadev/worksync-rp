@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class SecurityFilterTest {
+class SecurityFilterTest {
 
     private final SecurityFilter securityFilter = new SecurityFilter();
     private final HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
