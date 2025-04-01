@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import com.example.worksync.repository.UserRepository;
 import com.example.worksync.service.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,11 +18,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
-    @Autowired
-    private TokenService tokenService;
+    
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
 
-    @Autowired
-    private UserRepository userRepository;
+    public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+    }
 
     @SuppressWarnings("null")
     @Override
@@ -31,16 +33,19 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var login = this.tokenService.validateToken(token);
-            UserDetails userDetails = this.userRepository.findByEmail(login);
-            var auth = new UsernamePasswordAuthenticationToken(userDetails, null,
-                    userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            var optionalUser = this.userRepository.findByEmail(login);
+            if (optionalUser.isPresent()) {
+                UserDetails userDetails = optionalUser.get();
+                var auth = new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
         filterChain.doFilter(request, response);
 
     }
 
-    private String recoverToken(HttpServletRequest request) {
+    public String recoverToken(HttpServletRequest request) {
         var token = request.getHeader("Authorization");
         if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
             return null;

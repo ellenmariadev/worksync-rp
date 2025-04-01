@@ -1,14 +1,10 @@
 package com.example.worksync.controller;
 
 import com.example.worksync.service.CommentService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import com.example.worksync.dto.requests.CommentDTO;
 import com.example.worksync.model.User;
 
@@ -16,8 +12,11 @@ import com.example.worksync.model.User;
 @RequestMapping("/comments")
 public class CommentController {
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @GetMapping("/task/{taskId}")
     public ResponseEntity<List<CommentDTO>> listCommentsByTask(@PathVariable Long taskId) {

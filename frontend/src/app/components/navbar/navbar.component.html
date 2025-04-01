@@ -6,6 +6,37 @@
       <li><a routerLink="/tasks" routerLinkActive="active">Tarefas</a></li>
       <li><a routerLink="/create-task" routerLinkActive="active">+ Criar tarefa</a></li>
     </ul>
+    <div class="notifications" (click)="toggleNotifications()" (keydown)="toggleNotifications()">
+      <span class="material-icons md-36">notifications</span>
+      <span *ngIf="hasUnreadNotifications" class="notification-badge"></span>
+      <div class="notification-list" *ngIf="dropdownOpenNotification">
+        <div *ngIf="notifications.length > 0; else noNotifications">
+          <div class="notification-item" *ngFor="let notification of notifications"
+            (click)="markAsReadNotification(notification.id)">
+            <div class="notification-avatar">
+              <div class="avatar-initials"></div>
+            </div>
+            <div class="notification-content">
+              <div class="notification-text">
+                <span class="user-message">{{ notification.message }}</span>
+                <span class="action-text">{{ notification.action }}</span>
+              </div>
+              <div class="notification-comment">
+                {{ formatDateTime(notification.createdAt) }}
+              </div>
+            </div>
+            <div class="notification-options">
+              <span class="material-icons">more_vert</span>
+            </div>
+          </div>
+        </div>
+        <ng-template #noNotifications>
+          <div class="no-notifications">
+            Nenhuma notificação.
+          </div>
+        </ng-template>
+      </div>
+    </div>
     <div class="user" (click)="toggleDropdown()" (keydown)="toggleDropdown()">
       <span class="material-icons md-36">account_circle</span>
       <p class="user__name">{{ username }}</p>

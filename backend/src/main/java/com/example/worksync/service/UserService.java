@@ -1,11 +1,11 @@
 package com.example.worksync.service;
 
-import com.example.worksync.model.User;
-import com.example.worksync.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
+
+import com.example.worksync.model.User;
+import com.example.worksync.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -26,7 +26,11 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
-        UserDetails user = userRepository.findByEmail(email);
-        return (User) user;
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        return userOptional.orElse(null);
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
     }
 }
