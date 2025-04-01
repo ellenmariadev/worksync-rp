@@ -1,8 +1,8 @@
 package com.example.worksync.controller;
 
 import com.example.worksync.dto.requests.AuthDTO;
-import com.example.worksync.dto.responses.LoginResponseDTO;
 import com.example.worksync.dto.requests.UserDTO;
+import com.example.worksync.dto.responses.LoginResponseDTO;
 import com.example.worksync.model.User;
 import com.example.worksync.service.AuthService;
 import com.example.worksync.service.TokenService;
@@ -45,17 +45,14 @@ class AuthControllerTest {
 
     @Test
     void login_shouldReturnOkWithToken() {
-        AuthDTO authDTO = new AuthDTO();
-        authDTO.setEmail("test@example.com");
-        authDTO.setPassword("password");
-
-        User user = new User();
-        user.setEmail("test@example.com");
-
+        AuthDTO authDTO = new AuthDTO("test@example.com", "password");
+        User user = new User("test@example.com");
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null);
 
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
-        when(tokenService.generateToken(any(User.class))).thenReturn("testToken");
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(authentication);
+        when(tokenService.generateToken(any(User.class)))
+                .thenReturn("testToken");
 
         ResponseEntity<LoginResponseDTO> response = authController.login(authDTO);
 
@@ -65,14 +62,8 @@ class AuthControllerTest {
 
     @Test
     void register_shouldReturnCreatedWithUser() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail("newuser@example.com");
-        userDTO.setPassword("newpassword");
-        userDTO.setName("New User");
-
-        User registeredUser = new User();
-        registeredUser.setEmail("newuser@example.com");
-        registeredUser.setName("New User");
+        UserDTO userDTO = new UserDTO("newuser@example.com", "newpassword", "New User");
+        User registeredUser = new User("newuser@example.com", "New User");
 
         when(authService.register(any(UserDTO.class))).thenReturn(registeredUser);
 
@@ -84,10 +75,8 @@ class AuthControllerTest {
 
     @Test
     void listUsers_shouldReturnOkWithListOfUsers() {
-        User user1 = new User();
-        user1.setEmail("user1@example.com");
-        User user2 = new User();
-        user2.setEmail("user2@example.com");
+        User user1 = new User("user1@example.com");
+        User user2 = new User("user2@example.com");
         List<User> users = Arrays.asList(user1, user2);
 
         when(authService.listUsers()).thenReturn(users);
@@ -98,5 +87,3 @@ class AuthControllerTest {
         assertEquals(users, response.getBody());
     }
 }
-message.txt
-4 KB
