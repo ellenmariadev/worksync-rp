@@ -51,7 +51,6 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
     
-
     public Optional<ProjectDTO> findById(Long id) {
         return projectRepository.findById(id).map(this::convertToDTO);
     }
@@ -74,10 +73,10 @@ public class ProjectService {
         }
 
         if (dto.getParticipantIds() != null) {
-            existingProject.setParticipantIds(dto.getParticipantIds());
+            existingProject.setParticipantIds(new ArrayList<>(dto.getParticipantIds()));
         }
         if (dto.getTaskIds() != null) {
-            existingProject.setTaskIds(dto.getTaskIds());
+            existingProject.setTaskIds(new ArrayList<>(dto.getTaskIds()));
         }
 
         existingProject = projectRepository.save(existingProject);
@@ -95,8 +94,12 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NotFoundException("Project not found!"));
 
-        if (!project.getParticipantIds().contains(userId)) {
-            project.getParticipantIds().add(userId);
+        // Criando uma nova lista mutável para evitar UnsupportedOperationException
+        List<Long> participants = new ArrayList<>(project.getParticipantIds());
+
+        if (!participants.contains(userId)) {
+            participants.add(userId);
+            project.setParticipantIds(participants); // Atualiza a lista no objeto
             project = projectRepository.save(project);
         } else {
             throw new RuntimeException("User is already a participant of this project!");
@@ -110,8 +113,8 @@ public class ProjectService {
                 project.getId(),
                 project.getTitle(),
                 project.getDescription(),
-                project.getParticipantIds() != null ? project.getParticipantIds() : List.of(),
-                project.getTaskIds() != null ? project.getTaskIds() : List.of()
+                project.getParticipantIds() != null ? new ArrayList<>(project.getParticipantIds()) : new ArrayList<>(),
+                project.getTaskIds() != null ? new ArrayList<>(project.getTaskIds()) : new ArrayList<>()
         );
     }
 
@@ -122,13 +125,15 @@ public class ProjectService {
         project.setDescription(dto.getDescription());
 
         if (dto.getParticipantIds() != null) {
-            project.setParticipantIds(dto.getParticipantIds());
+            project.setParticipantIds(new ArrayList<>(dto.getParticipantIds()));
+
         } else {
             project.setParticipantIds(new ArrayList<>());
         }
 
         if (dto.getTaskIds() != null) {
-            project.setTaskIds(dto.getTaskIds());
+            project.setTaskIds(new ArrayList<>(dto.getTaskIds()));
+
         } else {
             project.setTaskIds(new ArrayList<>());
         }
@@ -136,3 +141,4 @@ public class ProjectService {
         return project;
     }
 }
+
