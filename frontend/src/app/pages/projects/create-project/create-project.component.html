@@ -1,11 +1,11 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
 
-<div class="container">
+<div class="container" *ngIf="userRole === 'ADMIN'">
   <a href="/projects">
     <span class="material-icons goback"> arrow_back </span>
   </a>
-  
+
   <h2 class="page-title">Criar Projeto</h2>
 
   <div class="form-wrapper">
@@ -41,7 +41,7 @@
       <ul class="chips">
           <li *ngFor="let participant of participants" class="user-chip">{{ participant.name }}</li>
       </ul>
-      
+
       <div class="save-btn-container">
         <button *ngIf="projectId" class="save-btn" (click)="finalizeProject()">Finalizar</button>
       </div>
