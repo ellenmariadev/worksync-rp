@@ -20,6 +20,7 @@ export class CreateProjectComponent implements OnInit {
   participants: any[] = [];
   users: any[] = [];
   selectedUserId: number | null = null;
+  userRole: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -34,6 +35,14 @@ export class CreateProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // ✅ Recupera e decodifica o token
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      this.userRole = decoded.role;
+      console.log('Papel do usuário:', this.userRole);
+    }
+
     this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
@@ -42,6 +51,8 @@ export class CreateProjectComponent implements OnInit {
       error: (err) => console.error('Erro ao buscar usuários:', err),
     });
   }
+
+
 
   createProject() {
     if (this.projectForm.invalid) {
@@ -98,5 +109,16 @@ export class CreateProjectComponent implements OnInit {
 
     alert('Projeto criado com sucesso!');
     this.router.navigate(['/projects']); // Redireciona para a listagem de projetos
+  }
+}
+
+function jwtDecode(token: string): any {
+  try {
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    return JSON.parse(decodedPayload);
+  } catch (error) {
+    console.error('Erro ao decodificar o token JWT:', error);
+    return null;
   }
 }

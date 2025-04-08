@@ -3,25 +3,32 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ProjectsService } from '../../services/project.service';
 import { ProjectDTO } from '../../services/types/project';
-import { RouterModule, Router } from '@angular/router';  // Importando Router
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, RouterModule],  // Importando RouterModule aqui
+  imports: [CommonModule, NavbarComponent, RouterModule],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
   projects: ProjectDTO[] = [];
+  userRole: string | null = null; // ⬅️ VARIÁVEL PRA ROLE
 
   constructor(
     private projectsService: ProjectsService,
-    private router: Router  // Agora Router é reconhecido
+    private router: Router,
+    private authService: AuthService // ⬅️ INJETA O SERVIÇO
   ) {}
 
   ngOnInit(): void {
     this.loadProjects();
+
+    const user = this.authService.getUser(); // ⬅️ PEGA O USUÁRIO
+    this.userRole = user?.role || null;
+    console.log('Role do usuário:', this.userRole);
   }
 
   loadProjects(title: string = ''): void {
@@ -36,7 +43,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   editProject(id: number): void {
-    this.router.navigate([`/edit-project/${id}`]);  // Usando o Router para navegação
+    this.router.navigate([`/edit-project/${id}`]);
   }
 
   deleteProject(id: number): void {
@@ -52,7 +59,6 @@ export class ProjectsComponent implements OnInit {
     }
   }
 
-  // Método que vai ser chamado no evento input
   onSearchChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this.loadProjects(inputElement.value);
