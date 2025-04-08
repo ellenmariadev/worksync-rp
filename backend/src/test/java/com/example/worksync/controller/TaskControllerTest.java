@@ -66,7 +66,7 @@ class TaskControllerTest {
 
         ResponseEntity<TaskDTO> response = taskController.getTaskById(taskId);
 
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(404, response.getStatusCode().value());
         assertNull(response.getBody());
     }
 
