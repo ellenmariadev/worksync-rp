@@ -1,28 +1,35 @@
 package com.example.worksync.service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+
 import com.example.worksync.dto.requests.CommentDTO;
 import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.exceptions.ResourceNotFoundException;
+import com.example.worksync.exceptions.UnauthorizedAccessException;
 import com.example.worksync.model.Comment;
 import com.example.worksync.model.Task;
 import com.example.worksync.model.User;
 import com.example.worksync.repository.CommentRepository;
 import com.example.worksync.repository.TaskRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.List;
-import java.time.temporal.ChronoUnit;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CommentServiceTest {
 
@@ -89,18 +96,44 @@ class CommentServiceTest {
         verify(commentRepository, times(1)).delete(comment);
     }
 
- 
-@Test
-void testDeleteComment() {
-    when(commentRepository.findById(comment.getId())).thenReturn(Optional.empty());
+    @Test
+    void deleteComment_CommentNotFound_ThrowsException() {
+        Long commentId = 1L;
+        User user = new User();
+        user.setId(1L);
 
-    try {
-        commentService.deleteComment(comment.getId(), user);
-        fail("Expected ResourceNotFoundException to be thrown");
-    } catch (ResourceNotFoundException e) {
-        // Test passed, exception is expected
+        when(commentRepository.findById(commentId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, 
+            () -> commentService.deleteComment(commentId, user));
+        
+        assertEquals("Comment not found with ID " + user.getId() + " not found", exception.getMessage());
+        verify(commentRepository, never()).delete(any());
     }
-}
+
+ 
+    @Test
+    void deleteComment_UnauthorizedAccess() {
+        Long commentId = 1L;
+        User user = new User();
+        user.setId(1L);
+
+        User commentOwner = new User();
+        commentOwner.setId(2L);
+
+        Comment comment = new Comment();
+        comment.setId(commentId);
+        comment.setUser(commentOwner);
+
+        when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
+
+        try {
+            assertThrows(UnauthorizedAccessException.class, () -> commentService.deleteComment(commentId, user));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        verify(commentRepository, never()).delete(any());
+    }
 
 
 @Test

@@ -1,26 +1,30 @@
 package com.example.worksync.controller;
 
-import com.example.worksync.dto.requests.TaskDTO;
-import com.example.worksync.service.TaskService;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+import com.example.worksync.dto.requests.TaskDTO;
 import com.example.worksync.model.User;
 import com.example.worksync.repository.TaskRepository;
+import com.example.worksync.service.TaskService;
 
 @ExtendWith(MockitoExtension.class)
 class TaskControllerTest {
@@ -32,7 +36,7 @@ class TaskControllerTest {
     private TaskController taskController;
 
     @Mock
-    private TaskRepository taskRepository; // ADICIONE ISSO
+    private TaskRepository taskRepository;
 
 
     @Test
@@ -152,6 +156,31 @@ class TaskControllerTest {
 
         assertEquals(204, response.getStatusCode().value());
         assertNull(response.getBody());
+    }
+
+
+    @Test
+    void testSearchTasks_WithAllParameters() {
+    List<TaskDTO> tasks = List.of(new TaskDTO());
+    
+    String title = "Project Task";
+    LocalDate startDateMin = LocalDate.now();
+    LocalDate startDateMax = LocalDate.now().plusDays(7);
+    Long creatorId = 1L;
+    Long assignedPersonId = 2L;
+    
+    when(taskService.searchTasks(eq("project task"), eq(startDateMin), eq(startDateMax), eq(creatorId), eq(assignedPersonId)))
+        .thenReturn(tasks);
+    
+    ResponseEntity<List<TaskDTO>> response = taskController.searchTasks(
+        title, startDateMin, creatorId, assignedPersonId, startDateMax);
+    
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(tasks, response.getBody());
+    
+    verify(taskService).searchTasks(
+        "project task", startDateMin, startDateMax, creatorId, assignedPersonId
+        );
     }
 
     @Test
