@@ -1,28 +1,27 @@
 package com.example.worksync;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class WorksyncApplicationTests {
 
-    @Autowired
-    private ApplicationContext applicationContext;
-
     @Test
     void contextLoads() {
-        Assertions.assertThat(applicationContext).isNotNull();
+        assertThat(SpringApplication.run(WorksyncApplication.class)).isNotNull();
     }
 
     @Test
     void mainMethodShouldStartApplication() {
         String[] args = {};
-        WorksyncApplication.main(args);
-        Assertions.assertThat(true).isTrue(); 
+        try (ConfigurableApplicationContext context = SpringApplication.run(WorksyncApplication.class, args)) {
+            assertThat(context).isNotNull();
+        }
     }
 }
