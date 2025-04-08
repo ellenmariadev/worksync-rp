@@ -99,15 +99,15 @@ class CommentServiceTest {
     @Test
     void deleteComment_CommentNotFound_ThrowsException() {
         Long commentId = 1L;
-        User user = new User();
-        user.setId(1L);
+        User newUser = new User();
+        newUser.setId(1L);
 
         when(commentRepository.findById(commentId)).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, 
-            () -> commentService.deleteComment(commentId, user));
+            () -> commentService.deleteComment(commentId, newUser));
         
-        assertEquals("Comment not found with ID " + user.getId() + " not found", exception.getMessage());
+        assertEquals("Comment not found with ID " + newUser.getId() + " not found", exception.getMessage());
         verify(commentRepository, never()).delete(any());
     }
 
@@ -115,20 +115,20 @@ class CommentServiceTest {
     @Test
     void deleteComment_UnauthorizedAccess() {
         Long commentId = 1L;
-        User user = new User();
+        User newUser = new User();
         user.setId(1L);
 
         User commentOwner = new User();
         commentOwner.setId(2L);
 
-        Comment comment = new Comment();
-        comment.setId(commentId);
-        comment.setUser(commentOwner);
+        Comment newComment = new Comment();
+        newComment.setId(commentId);
+        newComment.setUser(commentOwner);
 
-        when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
+        when(commentRepository.findById(commentId)).thenReturn(Optional.of(newComment));
 
         try {
-            assertThrows(UnauthorizedAccessException.class, () -> commentService.deleteComment(commentId, user));
+            assertThrows(UnauthorizedAccessException.class, () -> commentService.deleteComment(commentId, newUser));
         } catch (Exception e) {
             e.printStackTrace();
         }
