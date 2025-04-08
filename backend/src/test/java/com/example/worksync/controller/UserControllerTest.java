@@ -20,7 +20,7 @@ import com.example.worksync.model.User;
 import com.example.worksync.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
+class UserControllerTest {
 
     private MockMvc mockMvc;
 
