@@ -1,26 +1,31 @@
 package com.example.worksync.controller;
 
-import com.example.worksync.dto.requests.TaskDTO;
-import com.example.worksync.service.TaskService;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+import com.example.worksync.dto.requests.TaskDTO;
 import com.example.worksync.model.User;
 import com.example.worksync.repository.TaskRepository;
+import com.example.worksync.service.TaskService;
 
 @ExtendWith(MockitoExtension.class)
 class TaskControllerTest {
@@ -32,8 +37,7 @@ class TaskControllerTest {
     private TaskController taskController;
 
     @Mock
-    private TaskRepository taskRepository; // ADICIONE ISSO
-
+    private TaskRepository taskRepository;
 
     @Test
     void testListTasksByProject() {
@@ -75,55 +79,59 @@ class TaskControllerTest {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setTitle("Test Task"); // Garante que title está preenchido
         taskDTO.setDescription("Description");
-    
+
         User user = new User(); // Criar ou mockar User
-    
+
         // Mockando um BindingResult sem erros
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(false);
-    
+
         when(taskService.createTask(taskDTO, user)).thenReturn(taskDTO);
-    
+
         ResponseEntity<TaskDTO> response = taskController.createTask(taskDTO, user, bindingResult);
-    
+
         assertEquals(200, response.getStatusCode().value());
         assertEquals(taskDTO, response.getBody());
     }
-    
-
 
     @Test
     void testUpdateTask() {
         Long taskId = 1L;
         TaskDTO taskDTO = new TaskDTO();
-        when(taskService.updateTask(eq(taskId), any())).thenReturn(taskDTO);
+        taskDTO.setTitle("Updated Task");
+        taskDTO.setDescription("Updated Description");
+
+        when(taskService.updateTask(anyLong(), any(TaskDTO.class))).thenReturn(taskDTO);
 
         ResponseEntity<TaskDTO> response = taskController.updateTask(taskId, taskDTO);
 
-        assertEquals(200, response.getStatusCode().value());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(taskDTO, response.getBody());
+
+        verify(taskService).updateTask(taskId, taskDTO);
     }
 
     @Test
     void testDeleteTask() {
         // Mocka a existência da tarefa
         when(taskRepository.existsById(1L)).thenReturn(true);
-    
-        // Não precisa mockar taskService.deleteTask porque o Controller não o usa diretamente
-    
+
+        // Não precisa mockar taskService.deleteTask porque o Controller não o usa
+        // diretamente
+
         ResponseEntity<Void> response = taskController.deleteTask(1L);
-    
+
         assertEquals(204, response.getStatusCode().value());
-    
+
         // Verifica se realmente foi chamado o deleteById
         verify(taskRepository, times(1)).deleteById(1L);
     }
-    
+
     @Test
     void testCreateTask_WithValidationErrors() {
         TaskDTO taskDTO = new TaskDTO();
         User user = new User();
-        
+
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
 
@@ -155,14 +163,36 @@ class TaskControllerTest {
     }
 
     @Test
+    void testSearchTasks_WithAllParameters() {
+        List<TaskDTO> tasks = List.of(new TaskDTO());
+
+        String title = "Project Task";
+        LocalDate startDateMin = LocalDate.now();
+        LocalDate startDateMax = LocalDate.now().plusDays(7);
+        Long creatorId = 1L;
+        Long assignedPersonId = 2L;
+
+        when(taskService.searchTasks("project task", startDateMin, startDateMax, creatorId, assignedPersonId))
+                .thenReturn(tasks);
+
+        ResponseEntity<List<TaskDTO>> response = taskController.searchTasks(
+                title, startDateMin, creatorId, assignedPersonId, startDateMax);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(tasks, response.getBody());
+
+        verify(taskService).searchTasks(
+                "project task", startDateMin, startDateMax, creatorId, assignedPersonId);
+    }
+
+    @Test
     void testSearchTasks_WithException() {
         when(taskService.searchTasks(any(), any(), any(), any(), any()))
-            .thenThrow(new RuntimeException("Database error"));
+                .thenThrow(new RuntimeException("Database error"));
 
         ResponseEntity<List<TaskDTO>> response = taskController.searchTasks(null, null, null, null, null);
 
         assertEquals(500, response.getStatusCode().value());
     }
 
-    
 }
