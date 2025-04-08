@@ -43,6 +43,7 @@ class AuthControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @SuppressWarnings("null")
     @Test
     void login_shouldReturnOkWithToken() {
         AuthDTO authDTO = new AuthDTO();
@@ -60,7 +61,7 @@ class AuthControllerTest {
         ResponseEntity<LoginResponseDTO> response = authController.login(authDTO);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("testToken", response.getBody().getToken());
+        assertEquals("testToken", response.getBody() != null && response.getBody().getToken() != null ? response.getBody().getToken() : null);
     }
 
     @Test
