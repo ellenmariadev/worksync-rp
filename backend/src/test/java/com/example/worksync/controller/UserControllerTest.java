@@ -1,31 +1,37 @@
 package com.example.worksync.controller;
 
-import com.example.worksync.model.User;
-import com.example.worksync.service.UserService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@WebMvcTest(UserController.class)
+import com.example.worksync.model.User;
+import com.example.worksync.service.UserService;
+
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Mock
     private UserService userService;
+
+    @BeforeEach
+    void setup() {
+        UserController userController = new UserController(userService);
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+    }
 
     @Test
     @DisplayName("GET /users - Deve retornar todos os usuários")
@@ -56,7 +62,7 @@ public class UserControllerTest {
 
         mockMvc.perform(get("/users/email/found@example.com"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("found@example.com"));
+                .andExpect(jsonPath("$.username").value("found@example.com"));
     }
 
     @Test
