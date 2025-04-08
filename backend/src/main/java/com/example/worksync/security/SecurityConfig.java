@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/projects").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/tasks/projects/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/tasks/{id}").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/tasks").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/tasks").not().hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/tasks/{id}").authenticated()
                         .requestMatchers(HttpMethod.GET, "/tasks/search").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasRole("ADMIN")

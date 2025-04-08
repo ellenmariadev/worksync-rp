@@ -27,6 +27,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("worksync")
                     .withSubject(user.getUsername())
+                    .withClaim("role", user.getRole().toString())
                     .withExpiresAt(this.getExpirationAt())
                     .sign(algorithm);
             return token;
@@ -34,6 +35,7 @@ public class TokenService {
             throw new RuntimeException("Error while generating token", e);
         }
     }
+    
 
     public String validateToken(String token) {
         try {

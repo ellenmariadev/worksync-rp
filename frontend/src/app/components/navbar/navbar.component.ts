@@ -17,6 +17,7 @@ export class NavbarComponent {
   notifications: any[] = [];
   hasUnreadNotifications = false;
   username: string = '';
+  userRole: string | null = null;
 
   dropdownOpen = false;
   dropdownOpenNotification = false;
@@ -27,6 +28,7 @@ export class NavbarComponent {
     const user = this.authService.getUser();
     if (user && user.sub) {
       this.username = user.sub;
+      this.userRole = user.role;
     }
 
     this.notificationService.getAllNotifications().subscribe({
