@@ -3,7 +3,6 @@ package com.example.worksync.service;
 import com.example.worksync.dto.requests.CommentDTO;
 import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.exceptions.ResourceNotFoundException;
-import com.example.worksync.exceptions.UnauthorizedAccessException;
 import com.example.worksync.model.Comment;
 import com.example.worksync.model.Task;
 import com.example.worksync.model.User;
