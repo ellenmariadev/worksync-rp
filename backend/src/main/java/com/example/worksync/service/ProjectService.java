@@ -3,11 +3,11 @@ package com.example.worksync.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.example.worksync.dto.requests.ProjectDTO;
+import com.example.worksync.exceptions.ConflictException;
 import com.example.worksync.exceptions.NotFoundException;
 import com.example.worksync.exceptions.UnauthorizedAccessException;
 import com.example.worksync.model.Project;
@@ -38,7 +38,7 @@ public class ProjectService {
                 .map(userRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ProjectDTO> listProjects(String title) {
@@ -48,7 +48,7 @@ public class ProjectService {
 
         return projects.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
     
     public Optional<ProjectDTO> findById(Long id) {
@@ -102,7 +102,7 @@ public class ProjectService {
             project.setParticipantIds(participants); // Atualiza a lista no objeto
             project = projectRepository.save(project);
         } else {
-            throw new RuntimeException("User is already a participant of this project!");
+            throw new ConflictException("User is already a participant of this project!");
         }
 
         return convertToDTO(project);

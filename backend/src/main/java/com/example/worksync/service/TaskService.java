@@ -4,12 +4,9 @@ package com.example.worksync.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
 
 import com.example.worksync.dto.requests.TaskDTO;
 import com.example.worksync.event.UserTaskAssignmentEvent;
@@ -45,7 +42,7 @@ public class TaskService {
         List<Task> tasks = taskRepository.findByProjectId(projectId);
         return tasks.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
@@ -156,23 +153,12 @@ public class TaskService {
         }
 
 
-        return tasks.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return tasks.stream().map(this::convertToDTO).toList();
     }
 
 
     private TaskDTO convertToDTO(Task task) {
-        return new TaskDTO(
-                task.getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getStatus(),
-                task.getStartDate(),
-                task.getCompletionDate(),
-                task.getDeadline(),
-                task.getAssignedPerson() != null ? task.getAssignedPerson().getId() : null,
-                task.getCreator() != null ? task.getCreator().getId() : null,
-                task.getProject() != null ? task.getProject().getId() : null,
-                task.getProject() != null ? task.getProject().getTitle() : null);
+        return new TaskDTO(task);
     }
 
 

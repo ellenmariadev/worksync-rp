@@ -3,13 +3,11 @@ package com.example.worksync.dto.requests;
 
 import java.time.LocalDate;
 
-
+import com.example.worksync.model.Task;
 import com.example.worksync.model.enums.TaskStatus;
 
 
 public class TaskDTO {
-
-
     private Long id;
     private String title;
     private String description;
@@ -26,31 +24,31 @@ public class TaskDTO {
     public TaskDTO() {
     }
 
-
-    public TaskDTO(Long id, String title, String description, TaskStatus status,
-                   LocalDate startDate, LocalDate completionDate, LocalDate deadline,
-                   Long responsibleId, Long creatorId, Long projectId, String projectName) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.startDate = startDate;
-        this.completionDate = completionDate;
-        this.deadline = deadline;
-        this.responsibleId = responsibleId;
-        this.creatorId = creatorId;
-        this.projectId = projectId;
-        this.projectName = projectName;
+    public TaskDTO(Task task) {
+        if (task != null) {
+            this.id = task.getId();
+            this.title = task.getTitle();
+            this.description = task.getDescription();
+            this.status = task.getStatus();
+            this.startDate = task.getStartDate();
+            this.completionDate = task.getCompletionDate();
+            this.deadline = task.getDeadline();
+            
+            if (task.getAssignedPerson() != null) {
+                this.responsibleId = task.getAssignedPerson().getId();
+            }
+            
+            if (task.getCreator() != null) {
+                this.creatorId = task.getCreator().getId();
+            }
+            
+            if (task.getProject() != null) {
+                this.projectId = task.getProject().getId();
+                this.projectName = task.getProject().getTitle();
+            }
+        }
     }
-
-
-    public TaskDTO(Long id, String title, String description, TaskStatus status,
-                   LocalDate startDate, LocalDate completionDate, LocalDate deadline,
-                   Long responsibleId, Long creatorId, Long projectId) {
-        this(id, title, description, status, startDate, completionDate, deadline, responsibleId, creatorId, projectId, null);
-    }
-
-
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
