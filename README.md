@@ -27,6 +27,9 @@ Com uma interface simples e intuitiva, o projeto visa otimizar a produtividade d
 > [!NOTE] 
 > **Backend**\
 > [https://worksync-rp.onrender.com](https://worksync-rp.onrender.com)
+> 
+> **Frontend**\
+> [https://worksync-frontend.onrender.com](https://worksync-frontend.onrender.com)
 
 
 ### 📊 Tecnologias
