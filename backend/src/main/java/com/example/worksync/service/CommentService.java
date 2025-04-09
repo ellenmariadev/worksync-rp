@@ -3,7 +3,6 @@ package com.example.worksync.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ public class CommentService {
         List<Comment> comments = commentRepository.findByTaskId(taskId);
         return comments.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public CommentDTO addComment(CommentDTO commentDTO, User user) {
