@@ -91,18 +91,7 @@ class TaskServiceTest {
         task.setCompletionDate(null);
         task.setDeadline(LocalDate.now().plusDays(7));
 
-        taskDTO = new TaskDTO(
-                1L,
-                "Task Test",
-                "Description",
-                TaskStatus.NOT_STARTED,
-                LocalDate.now(),
-                null,
-                LocalDate.now().plusDays(7),
-                user.getId(),
-                user.getId(),
-                project.getId(),
-                project.getTitle());
+        taskDTO = new TaskDTO(task);
     }
 
     @Test
@@ -569,4 +558,22 @@ class TaskServiceTest {
             taskService.createTask(dto, user);
         });
     }
+
+    @Test
+    void testConvertToDTO_WithNullTask() {
+        TaskDTO resultDTO = new TaskDTO(null);
+
+        assertNull(resultDTO.getId());
+        assertNull(resultDTO.getTitle());
+        assertNull(resultDTO.getDescription());
+        assertNull(resultDTO.getStatus());
+        assertNull(resultDTO.getStartDate());
+        assertNull(resultDTO.getCompletionDate());
+        assertNull(resultDTO.getDeadline());
+        assertNull(resultDTO.getResponsibleId());
+        assertNull(resultDTO.getCreatorId());
+        assertNull(resultDTO.getProjectId());
+        assertNull(resultDTO.getProjectName());
+    }
+
 }
