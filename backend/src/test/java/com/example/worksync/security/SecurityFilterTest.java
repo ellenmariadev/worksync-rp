@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -65,39 +68,12 @@ class SecurityFilterTest {
         assertEquals(user, authentication.getPrincipal());
     }
 
-    @Test
-    void doFilterInternal_withInvalidToken_shouldNotSetAuthentication() throws ServletException, IOException {
-        when(request.getHeader("Authorization")).thenReturn("invalidToken");
-
-        securityFilter.doFilterInternal(request, response, filterChain);
-
-        verify(filterChain).doFilter(request, response);
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
-    }
-
-    @Test
-    void doFilterInternal_withNullToken_shouldNotSetAuthentication() throws ServletException, IOException {
-        when(request.getHeader("Authorization")).thenReturn(null);
-
-        securityFilter.doFilterInternal(request, response, filterChain);
-
-        verify(filterChain).doFilter(request, response);
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
-    }
-
-    @Test
-    void doFilterInternal_withEmptyToken_shouldNotSetAuthentication() throws ServletException, IOException {
-        when(request.getHeader("Authorization")).thenReturn("");
-
-        securityFilter.doFilterInternal(request, response, filterChain);
-
-        verify(filterChain).doFilter(request, response);
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
-    }
-
-    @Test
-    void doFilterInternal_withTokenWithoutBearer_shouldNotSetAuthentication() throws ServletException, IOException {
-        when(request.getHeader("Authorization")).thenReturn("token");
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"", "token", "invalidToken"})
+    void doFilterInternal_withInvalidTokenVariations_shouldNotSetAuthentication(String token) 
+            throws ServletException, IOException {
+        when(request.getHeader("Authorization")).thenReturn(token);
 
         securityFilter.doFilterInternal(request, response, filterChain);
 
