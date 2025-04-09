@@ -18,6 +18,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String ROLE_ADMIN = "ADMIN";
+    private static final String TASK_BY_ID = "/tasks/{id}";
+
     private final SecurityFilter securityFilter;
     private final CorsConfigurationSource corsConfigurationSource;
 
@@ -37,14 +40,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/projects").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/projects").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/projects").hasRole(ROLE_ADMIN)
                         .requestMatchers(HttpMethod.GET, "/tasks/projects/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/tasks/{id}").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/tasks").not().hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/tasks/{id}").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/tasks/search").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/projects/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, TASK_BY_ID).authenticated()
+                        .requestMatchers(HttpMethod.POST, "/tasks").not().hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.PATCH, TASK_BY_ID).hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/tasks/search").hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, TASK_BY_ID).hasRole(ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/projects/**").hasRole(ROLE_ADMIN)
                         .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/email/**").permitAll()

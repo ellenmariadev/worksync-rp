@@ -77,9 +77,7 @@ class SecurityFilterTest {
     void doFilterInternal_withInvalidTokenVariations_shouldNotSetAuthentication(String token) 
             throws ServletException, IOException {
         when(request.getHeader("Authorization")).thenReturn(token);
-        
         securityFilter.doFilterInternal(request, response, filterChain);
-        
         verify(filterChain).doFilter(request, response);
         assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
